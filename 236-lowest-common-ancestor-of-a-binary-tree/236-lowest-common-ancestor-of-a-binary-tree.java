@@ -23,7 +23,6 @@ class Solution {
                 if (!stack.isEmpty()) {
                     stack.peek().fp = state.fp || stack.peek().fp;
                     stack.peek().fq = state.fq || stack.peek().fq;
-                    //System.out.println(stack.peek().node.val + "'s new state? p: " + stack.peek().fp + ", q: " + stack.peek().fq);
                 }
                 
                 continue;
@@ -59,12 +58,10 @@ class State {
     }
     
     public boolean isDone() {
-        //System.out.println(node.val + " is " + ((ld && rd)? "done" : "not done"));
         return ld && rd;
     }
     
     public boolean foundAll() {
-        //System.out.println(node.val + ((fp && fq)? " found all" : " not found all"));
         return fp && fq;
     }
 }
