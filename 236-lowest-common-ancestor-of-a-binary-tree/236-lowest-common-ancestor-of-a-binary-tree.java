@@ -19,7 +19,9 @@ class Solution {
             if (state.foundAll()) return state.node;
             
             if (state.isDone()) {
+                
                 stack.pop();
+                
                 if (!stack.isEmpty()) {
                     stack.peek().fp = state.fp || stack.peek().fp;
                     stack.peek().fq = state.fq || stack.peek().fq;
@@ -27,8 +29,6 @@ class Solution {
                 
                 continue;
             }
-            
-            System.out.println(state.node.val);
             
             if (!state.ld) {
                 state.ld = true;
