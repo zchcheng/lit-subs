@@ -8,7 +8,7 @@ class Solution {
             int r = sum % k;
             Integer j = map.get(r);
             
-            if (j != null && i - j >= 2) { System.out.println(i); System.out.println(j); return true; }
+            if (j != null && i - j >= 2) { return true; }
             
             if (!map.containsKey(r)) map.put(r, i);
         }
