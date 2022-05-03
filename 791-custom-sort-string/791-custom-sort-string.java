@@ -1,28 +1,28 @@
 class Solution {
     public String customSortString(String order, String s) {
-        Map<Character, Integer> map = new HashMap<>();
+        int[] bucket = new int[26];
         
-        for(int i = 0; i < order.length(); i++) {
-            map.put(order.charAt(i), i);
-        }
-        
-        List<Character> list = new ArrayList<>();
         for(char c : s.toCharArray()) {
-            list.add(c);
+            bucket[c - 'a']++;
         }
-        
-        list.sort(new Comparator<Character>() {
-            @Override
-            public int compare(Character a, Character b) {
-                return map.getOrDefault(a, Integer.MAX_VALUE) - map.getOrDefault(b, Integer.MAX_VALUE);
-            }
-        });
         
         StringBuilder sb = new StringBuilder();
-        for(char c : list) {
-            sb.append(c);
+        
+        for(char c : order.toCharArray()) {
+            append(sb, c, bucket);
+        }
+        
+        for(int i = 0; i < bucket.length; i++) {
+            append(sb, (char)('a' + i), bucket);
         }
         
         return sb.toString();
+    }
+    
+    void append(StringBuilder sb, char c, int[] bucket) {
+        while(bucket[c - 'a'] > 0) {
+            sb.append(c);
+            bucket[c - 'a']--;
+        }
     }
 }
