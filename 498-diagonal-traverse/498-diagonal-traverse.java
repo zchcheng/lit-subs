@@ -9,13 +9,11 @@ class Solution {
         int[] res = new int[r * c];
         
         for(int i = 0, idx = 0; i < r + c - 1; i++) {
-            int j = (i % 2 == 0)? i : 0;
+            int j = (i % 2 == 0)? Math.min(i, r - 1) : 0 + Math.max(0, i - c + 1);
             int d = (i % 2 == 0)? -1 : 1;
-            int k = (i % 2 == 0)? -1 : i + 1;
             
-            while(j != k) {
-                if (j < r && i - j < c) res[idx++] = mat[j][i - j];
-                j += d;
+            for(; j >= 0 && j < r && i - j >= 0 && i - j < c; j += d) {
+                res[idx++] = mat[j][i - j];
             }
         }
         
