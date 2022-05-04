@@ -12,8 +12,6 @@ class Solution {
     }
     
     String encode(String s) {
-        if (s.isEmpty()) return "";
-        
         int n = s.length();
         String[] arr = new String[n];
         char p = s.charAt(0);
