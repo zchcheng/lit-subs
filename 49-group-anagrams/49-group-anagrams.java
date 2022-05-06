@@ -4,13 +4,7 @@ class Solution {
         
         for(String s : strs) {
             String enc = encode(s);
-            List<String> list = map.get(enc);
-            
-            if (list == null) {
-                list = new ArrayList<>();
-                map.put(enc, list);
-            }
-            
+            List<String> list = map.computeIfAbsent(enc, e -> new ArrayList<>());
             list.add(s);
         }
         
