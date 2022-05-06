@@ -9,23 +9,17 @@ class Solution {
             if (nums[mid] == target) {
                 return mid;
             }
-            if (nums[start] == target) {
-                return start;
-            }
-            if (nums[end] == target) {
-                return end;
-            }
             
             int s = nums[start];
             int m = nums[mid];
             int e = nums[end];
             
-            if (m < e) {
-                if (m < target && target < e) start = mid + 1;
-                else end = mid - 1;
-            } else {
-                if (s < target && target < m) end = mid - 1;
+            if (s <= m) {
+                if (s <= target && target < m) end = mid - 1;
                 else start = mid + 1;
+            } else {
+                if (m < target && target <= e) start = mid + 1;
+                else end = mid - 1;
             }
         }
         
