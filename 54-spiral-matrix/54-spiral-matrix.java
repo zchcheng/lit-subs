@@ -11,17 +11,16 @@ class Solution {
         
         int i = 0, j = 0;
         while(res.size() < total) {
+            
             res.add(matrix[i][j]);
             
             if (end(corner, i + dir[s][0], j + dir[s][1])) {
                 s = (s + 1) % dir.length;
                 int[] p = dir[s];
-                corner = new int[] {
-                    Math.max(corner[0], corner[0] + p[0]),
-                    Math.min(corner[1], corner[1] + p[0]),
-                    Math.max(corner[2], corner[2] + p[1]),
-                    Math.min(corner[3], corner[3] + p[1])
-                };
+                corner[0] = Math.max(corner[0], corner[0] + p[0]);
+                corner[1] = Math.min(corner[1], corner[1] + p[0]);
+                corner[2] = Math.max(corner[2], corner[2] + p[1]);
+                corner[3] = Math.min(corner[3], corner[3] + p[1]);
             }
             
             i += dir[s][0];
