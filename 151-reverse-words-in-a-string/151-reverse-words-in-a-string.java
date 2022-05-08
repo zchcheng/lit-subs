@@ -1,7 +1,6 @@
 class Solution {
     public String reverseWords(String s) {
         String[] split = s.split(" ");
-        
         String[] arr = Arrays.stream(split).filter(str -> !str.isEmpty()).toArray(String[]::new);
         
         for(int i = 0; i < arr.length / 2; i++) {
