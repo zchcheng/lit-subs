@@ -9,13 +9,8 @@ class Solution {
         for(; idx < s.length(); idx++) {
             char c = s.charAt(idx);
             
-            if (isNeg == null && res == null && c == '-') {
-                isNeg = true;
-                continue;
-            }
-            
-            if (isNeg == null && res == null && c == '+') {
-                isNeg = false;
+            if (isNeg == null && res == null && (c == '-' || c == '+')) {
+                isNeg = (c == '-')? true : false;
                 continue;
             }
             
