@@ -29,22 +29,23 @@ class Solution {
         int ca = (forbid == 'a')? 0 : cnt[0];
         int cb = (forbid == 'b')? 0 : cnt[1];
         int cc = (forbid == 'c')? 0 : cnt[2];
-        
-        if (ca == 0 && cb == 0 && cc == 0) return ' ';
-        
         int max = Math.max(ca, Math.max(cb, cc));
         
-        if (max == ca) {
+        char res = ' ';
+        
+        if (max == 0);
+        
+        else if (max == ca) {
             cnt[0]--;
-            return 'a';
-        }
-        
-        if (max == cb) {
+            res = 'a';
+        } else if (max == cb) {
             cnt[1]--;
-            return 'b';
+            res = 'b';
+        } else if (max == cc) {
+            cnt[2]--;
+            res = 'c';
         }
         
-        cnt[2]--;
-        return 'c';
+        return res;
     }
 }
