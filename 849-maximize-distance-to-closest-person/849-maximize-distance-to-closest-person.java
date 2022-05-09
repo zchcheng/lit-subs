@@ -8,6 +8,7 @@ class Solution {
             }
             
             int d = dist(l, i - 1, seats.length);
+            
             res = Math.max(res, d);
             l = i + 1;
         }
