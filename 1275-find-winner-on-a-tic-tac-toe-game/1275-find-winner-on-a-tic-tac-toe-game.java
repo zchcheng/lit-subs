@@ -28,7 +28,6 @@ class Solution {
                 return true;
             }
         }
-        
         return Math.abs(diag1) == 3 || Math.abs(diag2) == 3;
     }
 }
