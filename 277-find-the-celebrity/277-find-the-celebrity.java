@@ -3,24 +3,31 @@
 
 public class Solution extends Relation {
     public int findCelebrity(int n) {
-        int[] arr = new int[n];
+        int res = 0;
         
         for(int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                if (i == j) continue;
-                if (knows(i, j)) {
-                    arr[j]++;
-                    arr[i]--;
-                }
+            if (res == i) {
+                continue;
+            }
+            
+            if (knows(res, i)) { 
+                // res knows someone else, so s/he cannot be the celebrity
+                // the next possible one would be i since someone knows him/her.
+                res = i;
             }
         }
         
         for(int i = 0; i < n; i++) {
-            if (arr[i] == n - 1) {
-                return i;
+            if (res == i) continue;
+            if (!knows(i, res)) {
+                return -1;
+            }
+            
+            if (knows(res, i)) {
+                return -1;
             }
         }
         
-        return -1;
+        return res;
     }
 }
