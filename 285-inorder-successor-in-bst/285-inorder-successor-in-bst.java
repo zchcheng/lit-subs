@@ -9,25 +9,18 @@
  */
 class Solution {
     public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
-        TreeNode prev = null;
+        TreeNode res = null;
         
-        while(root != null && root.val != p.val) {
-            if (root.val < p.val) {
+        while(root != null) {
+            if (root.val <= p.val) {
                 root = root.right;
                 continue;
-            }
+            } 
             
-            prev = root;
+            res = root;
             root = root.left;
         }
         
-        if (root == null) return null;
-        
-        TreeNode next = root.right;
-        if (next == null) return prev;
-        
-        while(next.left != null) next = next.left;
-        
-        return next;
+        return  res;
     }
 }
