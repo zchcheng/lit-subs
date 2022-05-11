@@ -1,38 +1,26 @@
 class Solution {
     public int minDeletions(String s) {
-        Map<Character, Integer> map = new HashMap<>();
+        int[] cnt = new int[26];
         
-        for(char c : s.toCharArray()) {
-            map.put(c, map.getOrDefault(c, 0) + 1);
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            cnt[c - 'a']++;
         }
         
-        Map<Integer, Integer> cnt = new HashMap<>();
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        List<Integer> freq = new ArrayList<>();
         
-        for(Integer i : map.values()) {
-            cnt.put(i, cnt.getOrDefault(i, 0) + 1);
+        for(int i = 0; i < 26; i++) {
+            if (cnt[i] > 0) freq.add(cnt[i]);
         }
         
-        for(Integer i : cnt.keySet()) {
-            pq.offer(i);
-        }
+        freq.sort(Collections.reverseOrder());
         
         int res = 0;
         
-        while(!pq.isEmpty()) {
-            int i = pq.poll();
-            int c = cnt.getOrDefault(i, 0);
-            if (c <= 1) continue;
-            
-            res += (c - 1);
-            
-            if (i == 1) { break; }
-            
-            if (!cnt.containsKey(i - 1)) {
-                pq.offer(i - 1);
-            }
-            
-            cnt.put(i - 1, cnt.getOrDefault(i - 1, 0) + c - 1);
+        for(int i = 1, max = freq.get(0) - 1; i < freq.size(); i++) {
+            int f = freq.get(i);
+            res += Math.max(0, f - max);
+            max = Math.max(0, Math.min(max, f) - 1);
         }
         
         return res;
