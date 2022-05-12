@@ -1,41 +1,38 @@
 class Solution {
     public int[] findOrder(int nc, int[][] pre) {
-        
-        Map<Integer, Integer> dep = new HashMap<>();
-        Map<Integer, Set<Integer>> req = new HashMap<>();
+        int[] idg = new int[nc];
+        Map<Integer, List<Integer>> req = new HashMap<>();
         
         for(int[] p : pre) {
-            Set<Integer> s = req.computeIfAbsent(p[1], i -> new HashSet<>());
+            List<Integer> s = req.computeIfAbsent(p[1], i -> new LinkedList<>());
             s.add(p[0]);
-            dep.put(p[0], dep.getOrDefault(p[0], 0) + 1);
+            idg[p[0]]++;
         }
         
         Queue<Integer> q = new LinkedList<>();
-        List<Integer> res = new ArrayList<>();
         
         for(int i = 0; i < nc; i++) {
-            if (dep.containsKey(i)) continue;
+            if (idg[i] != 0) continue;
             q.offer(i);
         }
         
+        int[] res = new int[nc];
+        int idx = 0;
+        
         while(!q.isEmpty()) {
             Integer i = q.poll();
-            res.add(i);
-            Set<Integer> s = req.get(i);
+            res[idx++] = i;
+            List<Integer> s = req.get(i);
+            
             if (s == null) continue;
+            
             for(Integer si : s) {
-                Integer cnt = dep.get(si);
-                if (cnt != 1) {
-                    dep.put(si, cnt - 1);
-                    continue;
-                }
-                dep.remove(si);
-                q.offer(si);
+                if (--idg[si] == 0) q.offer(si);
             }
         }
         
-        if (!dep.isEmpty()) return new int[0];
+        if (idx != nc) return new int[0];
         
-        return res.stream().mapToInt(Integer::intValue).toArray();
+        return res;
     }
 }
