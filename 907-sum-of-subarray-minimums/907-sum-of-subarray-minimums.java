@@ -6,8 +6,8 @@ class Solution {
         Stack<int[]> next = new Stack<>();
         Stack<int[]> prev = new Stack<>();
         for(int i = 0; i < n; i++) {
-            monoInc(arr[i], i, prev);
-            monoInc(arr[n - 1 - i], n - 1 - i, next);
+            findBoundary(arr[i], i, prev);
+            findBoundary(arr[n - 1 - i], n - 1 - i, next);
             
             boundary[i][0] = (prev.isEmpty())? -1 : prev.peek()[0];
             boundary[n - 1 - i][1] = (next.isEmpty())? n : next.peek()[0];
@@ -27,7 +27,7 @@ class Solution {
         return (int)res;
     }
     
-    void monoInc(int v, int i, Stack<int[]> stack) {
+    void findBoundary(int v, int i, Stack<int[]> stack) {
         while(!stack.isEmpty() && ((stack.peek()[1] > v) || (stack.peek()[1] == v && i < stack.peek()[0]))) {
             stack.pop();
         }
