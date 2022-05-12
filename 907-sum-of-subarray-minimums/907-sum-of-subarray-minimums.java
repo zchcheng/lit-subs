@@ -20,7 +20,7 @@ class Solution {
         long mod = 1000000007;
         
         for(int i = 0; i < n; i++) {
-            res += ((long)(i - boundary[i][0]) * (boundary[i][1] - i) * arr[i]) % mod;
+            res += ((long)(i - boundary[i][0]) * (boundary[i][1] - i) * arr[i]);
             res %= mod;
         }
         
