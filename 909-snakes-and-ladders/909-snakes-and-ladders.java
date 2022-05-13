@@ -69,11 +69,6 @@ class Solution {
         }
         
         @Override
-        public String toString() {
-            return "[" + r + "," + c + "] (" + x + ")";
-        }
-        
-        @Override
         public boolean equals(Object o) {
             Loc l = (Loc)o;
             return l.x == x;
