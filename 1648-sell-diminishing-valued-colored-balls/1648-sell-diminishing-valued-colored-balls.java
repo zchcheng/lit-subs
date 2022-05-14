@@ -8,26 +8,26 @@ class Solution {
             bucket.put(i, bucket.getOrDefault(i, 0) + 1);
         }
         
-        List<int[]> list = new ArrayList<>();
+        List<long[]> list = new ArrayList<>();
         
         for(Map.Entry<Integer, Integer> kv : bucket.entrySet()) {
-            list.add(new int[] { kv.getKey(), kv.getValue() });
+            list.add(new long[] { kv.getKey(), kv.getValue() });
         }
         
-        list.sort((int[] a, int[] b) -> {
-            return b[0] - a[0];
+        list.sort((long[] a, long[] b) -> {
+            return (int)(b[0] - a[0]);
         });
             
         long res = 0;
         
         for(int i = 0; i < list.size() && orders > 0;) {
-            int[] p = list.get(i);
-            int[] np = (i == list.size() - 1)? new int[] {0, 0} : list.get(i + 1);
+            long[] p = list.get(i);
+            long[] np = (i == list.size() - 1)? new long[] {0, 0} : list.get(i + 1);
             
             long n = Math.min(p[0] - np[0], orders / p[1]);
             
             if (n == 0) {
-                res = add(res, (long)orders * p[0]);
+                res = add(res, orders * p[0]);
                 orders = 0;
                 continue;
             }
@@ -47,7 +47,7 @@ class Solution {
     }
     
     long add(long a, long b) {
-        return (a % K + b % K) % K;
+        return (a + b) % K;
     }
     
     long gain(long ub, long n) {
