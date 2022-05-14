@@ -32,15 +32,17 @@ class OpNode extends Node {
         
     @Override
     public int evaluate() {
+        int lv = (left == null)? 0 : left.evaluate();
+        int rv = (right == null)? 0 : right.evaluate();
         switch(op) {
             case '+':
-                return left.evaluate() + right.evaluate();
+                return lv + rv;
             case '-':
-                return left.evaluate() - right.evaluate();
+                return lv - rv;
             case '*':
-                return left.evaluate() * right.evaluate();
+                return lv * rv;
             case '/':
-                return left.evaluate() / right.evaluate();
+                return lv / rv;
         }
         return 0;
     }
@@ -55,19 +57,50 @@ class OpNode extends Node {
 
 class TreeBuilder {
     Node buildTree(String[] postfix) {
-        Pair<Integer, Node> p = helper(postfix, 0, postfix.length - 1);
-        return p.getValue();
+        /**
+         * DFS approach
+         * Pair<Integer, Node> p = dfs(postfix, 0, postfix.length - 1);
+         * return p.getValue();
+         */
+        
+        Stack<OpNode> stack = new Stack<>();
+        
+        for(int i = postfix.length - 1; i >= 0; i--) {
+            String s = postfix[i];
+            if (isOp(s)) {
+                OpNode node = new OpNode(s.charAt(0));
+                stack.push(node);
+            } else {
+                ValNode node = new ValNode(Integer.valueOf(s));
+                OpNode parent = stack.peek();
+                
+                if (parent.right == null) {  parent.right = node; } 
+                else { parent.left = node; }
+                
+                while(stack.peek().left != null && stack.peek().right != null) {
+                    OpNode n = stack.pop();
+                    if (stack.isEmpty()) {
+                        stack.push(n);
+                        break;
+                    }
+                    if (stack.peek().right == null) { stack.peek().right = n; }
+                    else { stack.peek().left = n; }
+                }
+            }
+        }
+        
+        return stack.peek();
     }
     
-    Pair<Integer, Node> helper(String[] postfix, int s, int e) {
+    Pair<Integer, Node> dfs(String[] postfix, int s, int e) {
         if (isOp(postfix[e])) {
             OpNode node = new OpNode(postfix[e].charAt(0));
             
-            Pair<Integer, Node> rp = helper(postfix, s, e - 1);
+            Pair<Integer, Node> rp = dfs(postfix, s, e - 1);
             node.right = rp.getValue();
             
             if (rp.getKey() > s) {
-                Pair<Integer, Node> lp = helper(postfix, s, rp.getKey() - 1);
+                Pair<Integer, Node> lp = dfs(postfix, s, rp.getKey() - 1);
                 node.left = lp.getValue();
                 return new Pair(lp.getKey(), node);
             }
