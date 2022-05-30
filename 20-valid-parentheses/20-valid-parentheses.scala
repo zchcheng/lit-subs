@@ -1,21 +1,20 @@
-import scala.collection.mutable
+import scala.collection.mutable._
 
 object Solution {
     def isValid(s: String): Boolean = {
+        val stack: Stack[Char] = Stack()
+        val map: Map[Char, Char] = Map({')' -> '('}, {']' -> '['}, {'}' -> '{'})
         var res = true
-        var stack = mutable.Stack[Char]()
-        var map: Map[Char, Char] = Map({ ')' -> '(' }, { '}' -> '{' }, { ']' -> '[' })
-
-        s.foreach { c =>
-            c match {
-                case '(' | '[' | '{' => stack.push(c)
-                case ')' | ']' | '}' => {
-                    res &&= !stack.isEmpty && stack.top == map(c)
-                    if (!stack.isEmpty) stack.pop()
-                }
+                                                               
+        s.foreach { x => 
+            if (map.contains(x)) {
+                res &&= stack.nonEmpty && stack.top == map(x)
+                if (stack.nonEmpty) stack.pop
+            } else {
+                stack.push(x)
             }
         }
-
+                                                               
         res && stack.isEmpty
     }
 }
