@@ -1,13 +1,17 @@
 object Solution {
     def twoSum(nums: Array[Int], target: Int): Array[Int] = {
         var map: Map[Int, Int] = Map()
-        nums.zipWithIndex.map {
-            case (n, idx) if map.contains(target - n) => 
-                Some(Array[Int](idx, map.get(target - n).get))
-            case (n, idx) => {
-                map += (n->idx)
-                None
+        var res: Array[Int] = null
+        val len = nums.length
+        
+        for(i <- 0 to len - 1) {
+            val dif = target - nums(i)
+            if (map.contains(dif)) {
+                res = Array(map(dif), i)
             }
-        }.flatten.head
+            map += (nums(i) -> i)
+        }
+        
+        res
     }
 }
