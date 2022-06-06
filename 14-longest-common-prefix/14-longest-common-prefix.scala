@@ -1,15 +1,29 @@
+import scala.collection.mutable._
+
 object Solution {
     def longestCommonPrefix(strs: Array[String]): String = {
+        var done = false
         var res = ""
         var i = 0
-        var done = false;
-
-        while (!done) {
-            val set = strs.map { x => if (x.length <= i) '0' else x.charAt(i) }.toSet
-            if (set.size == 1 && set.head != '0') res += set.head else done = true
-            i += 1
+        
+        while(!done) {
+            var set = Set[Char]()
+            
+            strs.foreach { str =>
+                if (str.size > i) set += str.charAt(i)
+                else done = true
+            }
+            
+            if (set.size > 1) {
+                done = true
+            } 
+            
+            if (!done) {
+                res += set.head
+                i += 1
+            }
         }
-
+        
         res
     }
 }
