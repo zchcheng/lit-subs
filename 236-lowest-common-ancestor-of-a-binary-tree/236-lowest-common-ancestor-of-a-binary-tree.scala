@@ -1,12 +1,3 @@
-/**
- * Definition for a binary tree node.
- * class TreeNode(var _value: Int) {
- *   var value: Int = _value
- *   var left: TreeNode = null
- *   var right: TreeNode = null
- * }
- */
-
 import scala.collection.mutable._
 
 object Solution {
@@ -15,38 +6,30 @@ object Solution {
       p: TreeNode,
       q: TreeNode
   ): TreeNode = {
-
-    val ppath: Stack[TreeNode] = Stack()
-    getPath(root, p, ppath)
-    val nodes: Set[TreeNode] = Set.from(ppath)
-
-    val qpath: Stack[TreeNode] = Stack()
-    getPath(root, q, qpath)
-    var res: TreeNode = null
-    while (res == null && qpath.nonEmpty) {
-      val node = qpath.pop
-      if (nodes.contains(node)) {
-        res = node
-      }
-    }
-
-    res
+    recursionHelper(root, p, q)._1
   }
 
-  def getPath(root: TreeNode, p: TreeNode, path: Stack[TreeNode]): Boolean = {
-    if (root == null) false
-    else if (root == p) {
-      path.push(p)
-      true
-    } else {
-      path.push(root)
-      if (getPath(root.left, p, path)) {
-        true
-      } else if (getPath(root.right, p, path)) {
-        true
-      } else {
-        path.pop()
-        false
+  def recursionHelper(
+      root: TreeNode,
+      p: TreeNode,
+      q: TreeNode
+  ): (TreeNode, Boolean) = {
+    if (root == null) (null, false)
+    else {
+      var found: Int = 0
+
+      if (root == p || root == q) found += 1
+
+      val (lres, lf) = recursionHelper(root.left, p, q)
+      val (rres, rf) = recursionHelper(root.right, p, q)
+
+      if (lres != null) (lres, true)
+      else if (rres != null) (rres, true)
+      else {
+        if (lf) found += 1
+        if (rf) found += 1
+        if (found >= 2) (root, true)
+        else (null, found > 0)
       }
     }
   }
