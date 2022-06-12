@@ -2,14 +2,31 @@ import scala.collection.mutable._
 
 object Solution {
   def sortColors(nums: Array[Int]): Unit = {
-    val cn = Array(0, 0, 0)
-    nums.foreach { num => cn(num) += 1 }
+    var p0 = 0
+    var p2 = nums.length - 1
+    var cur = 0
 
-    var j = 0
-    for (i <- 0 to nums.length - 1) {
-      while (cn(j) == 0) j += 1
-      cn(j) -= 1
-      nums(i) = j
+    while (cur <= p2) {
+      nums(cur) match {
+        case 0 => {
+          swap(p0, cur, nums)
+          p0 += 1
+          cur += 1
+        }
+        case 1 => {
+          cur += 1
+        }
+        case 2 => {
+          swap(p2, cur, nums)
+          p2 -= 1
+        }
+      }
     }
+  }
+
+  def swap(a: Int, b: Int, nums: Array[Int]): Unit = {
+    val tmp = nums(a)
+    nums(a) = nums(b)
+    nums(b) = tmp
   }
 }
