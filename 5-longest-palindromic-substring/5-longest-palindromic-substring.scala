@@ -17,7 +17,7 @@ object Solution {
       }
     }
 
-    for (i <- 2 to s.length) {
+    for (i <- 2 to s.length - 1) {
       for (j <- 0 to s.length - 1) {
         dp(i)(j) =
           (j - i >= 0 && dp(i - 2)(j - 1) && s.charAt(j) == s.charAt(j - i))
