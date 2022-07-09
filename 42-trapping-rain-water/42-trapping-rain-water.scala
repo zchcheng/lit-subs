@@ -1,19 +1,23 @@
-import scala.collection.mutable._
-
 object Solution {
     def trap(height: Array[Int]): Int = {
-        val stack: Stack[(Int, Int)] = Stack()
+        var left = 0
+        var right = height.length - 1
         var res = 0
 
-        height.zipWithIndex.foreach { case (h, idx) =>
-            while(stack.nonEmpty && stack.top._2 < h) {
-                val (pidx, ph) = stack.pop
-                val d = if (stack.isEmpty) 0 else (Math.min(stack.top._2, h) - ph)
-                val w = if (stack.isEmpty) 0 else idx - stack.top._1 - 1
-                res += d * w
-            }
+        var lm = 0
+        var rm = 0
 
-            if (stack.isEmpty || stack.top._2 >= h) stack.push((idx, h))
+        while (left < right) {
+            lm = height(left) max lm
+            rm = height(right) max rm
+
+            if (lm <= rm) {
+                res += lm - height(left)
+                left += 1
+            } else {
+                res += rm - height(right)
+                right -= 1
+            }
         }
 
         res
