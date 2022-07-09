@@ -13,7 +13,6 @@ class Codec {
     // Encodes a list of strings to a single string.
     def serialize(root: TreeNode): String = {
         val res = serializer(root)
-        println(res)
         res
     }
     
