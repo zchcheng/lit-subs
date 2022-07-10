@@ -1,25 +1,30 @@
 class FreqStack {
-    Map<Integer, Integer> map = new HashMap<>();
-    PriorityQueue<Pair<Integer, int[]>> pq = new PriorityQueue<>((a, b) -> {
-        if (a.getValue()[0] == b.getValue()[0]) return b.getValue()[1] - a.getValue()[1];
-        return b.getValue()[0] - a.getValue()[0];
-    });
-    int cnter = 0;
-
+    Map<Integer, Integer> freq = new HashMap<Integer, Integer>();
+    Map<Integer, Stack<Integer>> group = new HashMap<Integer, Stack<Integer>>();
+    int maxFreq = 0;
+    
     public FreqStack() {
-        
     }
     
     public void push(int val) {
-        int freq = map.getOrDefault(val, 0);
-        pq.offer(new Pair(val, new int[] {freq + 1, cnter++}));
-        map.put(val, freq + 1);
+        int f = freq.getOrDefault(val, 0) + 1;
+        
+        freq.put(val, f);
+        maxFreq = Math.max(maxFreq, f);
+        
+        Stack<Integer> stack = group.getOrDefault(f, new Stack<>());
+        stack.push(val);
+        group.put(f, stack);
     }
     
     public int pop() {
-        Pair<Integer, int[]> p = pq.poll();
-        map.put(p.getKey(), p.getValue()[0] - 1);
-        return p.getKey();
+        Stack<Integer> stack = group.get(maxFreq);
+        int res = stack.pop();
+        freq.put(res, freq.get(res) - 1);
+        if (stack.isEmpty()) {
+            maxFreq--;
+        }
+        return res;
     }
 }
 
