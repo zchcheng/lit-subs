@@ -1,57 +1,43 @@
+import scala.collection.mutable._
+
 object Solution {
     def calculate(s: String): Int = {
-        var res = 0
+        val stack: Stack[Int] = Stack()
+
+        var num = 0
+        var sign = 1
         var cur = 0
-        var neg = false
 
-        def addup(v: Int, isNeg: Boolean): Unit = {
-            if (isNeg) res -= v
-            else res += v
-        }
-
-        var i = 0
-        while(i < s.length) {
-            s.charAt(i) match {
-                case '(' => 
-                    val e = getPair(s, i)
-                    val v = calculate(s.subSequence(i + 1, e).toString)
-                    addup(v, neg)
-                    i = e
-                case '+' => 
-                    addup(cur, neg)
-                    neg = false
+        s.foreach { c =>
+            c match {
+                case '(' =>
+                    println("push: " + stack)
+                    stack.push(cur)
+                    stack.push(sign)
+                    sign = 1
                     cur = 0
-                case '-' => 
-                    addup(cur, neg)
-                    neg = true
-                    cur = 0
-                case c if c.isDigit => 
-                    val d = c.getNumericValue
-                    cur = cur * 10 + d
+                case ')' =>
+                    println("pop: " + stack)
+                    val psign = stack.pop()
+                    val prev = stack.pop()
+                    cur += sign * num
+                    println("this: " + cur)
+                    cur = cur * psign + prev
+                    println("cur: " + cur)
+                    sign = 1
+                    num = 0
+                case op if op == '+' || op == '-' =>
+                    println(sign + " " + num)
+                    cur += sign * num
+                    println("now: " + cur)
+                    sign = if (op == '+') 1 else -1
+                    num = 0
+                case d if d.isDigit =>
+                    num = num * 10 + d.getNumericValue
                 case _ => 
             }
-
-            i += 1
         }
-                       
-        addup(cur, neg)
 
-        res
-    }
-
-    def getPair(s: String, idx: Int): Int = {
-        if (s.charAt(idx) != '(') return idx
-        else {
-            var i = idx + 1
-            var stack = 1
-
-            while (i < s.length && stack > 0) {
-                if (s.charAt(i) == ')') stack -= 1
-                else if (s.charAt(i) == '(') stack += 1
-                if (stack != 0) i += 1
-            }
-
-            i
-        }
+        cur + sign * num
     }
 }
