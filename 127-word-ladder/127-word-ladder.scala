@@ -16,8 +16,6 @@ object Solution {
 
             graph += (w1 -> set)
         }
-        
-        println(graph)
 
         val visited: Set[String] = Set()
         val queue: Queue[String] = Queue()
@@ -37,7 +35,6 @@ object Solution {
                 if (word == endWord) { found = true }
                 else {
                     val connected = graph.get(word).getOrElse(Set())
-                    println("connected: " + connected)
                     connected.foreach { other =>
                         if (!visited.contains(other)) {
                             queue.enqueue(other)
