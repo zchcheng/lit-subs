@@ -1,74 +1,63 @@
 class Solution {
-    int[] parent;
-    
     public List<List<String>> accountsMerge(List<List<String>> accounts) {
-        parent = new int[accounts.size()];
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Set<Integer>> map = new HashMap<>();
         
-        for(int i = 0; i < parent.length; i++) {
-            parent[i] = i;
-        }
-        
-        for(int i = 0; i < parent.length; i++) {
+        for(int i = 0; i < accounts.size(); i++) {
             List<String> acc = accounts.get(i);
-            
             for(int j = 1; j < acc.size(); j++) {
-                
                 String email = acc.get(j);
-                Integer id = map.get(email);
-                
-                if (id == null) {
-                    map.put(email, i);
-                    continue;
-                }
-                
-                union(i, id);
+                Set<Integer> set = map.computeIfAbsent(email, k -> new HashSet());
+                set.add(i);
             }
         }
         
-        Map<Integer, Set<String>> emails = new HashMap<>();
+        int[] gid = new int[accounts.size()];
+        for(int i = 0; i < gid.length; i++) {
+            gid[i] = i;
+        }
         
-        for(int i = 0; i < parent.length; i++) {
-            int id = find(parent[i]);
-            Set<String> s = emails.getOrDefault(id, new HashSet<>());
-            List<String> acc = accounts.get(i);
-            
-            for(int j = 1; j < acc.size(); j++) {
-                s.add(acc.get(j));
+        for(Map.Entry<String, Set<Integer>> kv : map.entrySet()) {
+            List<Integer> list = new ArrayList<>(kv.getValue());
+            for(int i : list) {
+                for(int j : list) {
+                    if (i != j) union(gid, i, j);
+                }
             }
-            
-            emails.put(id, s);
+        }
+        
+        Map<Integer, Set<String>> groups = new HashMap<>();
+        for(int i = 0; i < accounts.size(); i++) {
+            int g = find(gid, i);
+            Set<String> emails = groups.computeIfAbsent(g, k -> new HashSet<>());
+            List<String> account = accounts.get(i);
+            emails.addAll(account.subList(1, account.size()));
         }
         
         List<List<String>> res = new ArrayList<>();
         
-        for(Map.Entry<Integer, Set<String>> kv : emails.entrySet()) {
-            List<String> info = new ArrayList<>();
+        for(Map.Entry<Integer, Set<String>> kv : groups.entrySet()) {
+            List<String> account = new ArrayList<>();
             String name = accounts.get(kv.getKey()).get(0);
-            
-            info.add(name);
-            List<String> es = new ArrayList<>(kv.getValue());
-            es.sort((String a, String b) -> a.compareTo(b));
-            info.addAll(es);
-            
-            res.add(info);
+            account.add(name);
+            List<String> emails = new ArrayList<>(kv.getValue());
+            Collections.sort(emails);
+            account.addAll(emails);
+            res.add(account);
         }
         
         return res;
     }
     
-    int find(int id) {
-        if (parent[id] != id) {
-            int pid = find(parent[id]);
-            parent[id] = pid;
+    int find(int[] gid, int n) {
+        if (gid[n] == n) {
+            return n;
         }
-        return parent[id];
+        return find(gid, gid[n]);
     }
     
-    void union(int a, int b) {
-        int id1 = find(a);
-        int id2 = find(b);
-        if (id1 == id2) return;
-        parent[id2] = id1;
+    void union(int[] gid, int a, int b) {
+        int ga = find(gid, a);
+        int gb = find(gid, b);
+        gid[gb] = ga;
     }
 }
