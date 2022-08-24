@@ -10,13 +10,7 @@ class Solution {
             res.add(s);
             return;
         }
-        
-        if (open < n) {
-            helper(s + "(", open + 1, close, n, res);
-        }
-        
-        if (close < open) {
-            helper(s + ")", open, close + 1, n, res);
-        }
+        if (open < n) helper(s + "(", open + 1, close, n, res);
+        if (close < open) helper(s + ")", open, close + 1, n, res);
     }
 }
