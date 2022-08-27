@@ -1,36 +1,30 @@
 class Solution {
-    int[] nums;
-    
     public int findKthLargest(int[] nums, int k) {
-        this.nums = nums;
-        quickSelect(0, nums.length - 1, k - 1);
-        return nums[k - 1];
+        return quickSelect(nums, 0, nums.length - 1, k - 1);
     }
     
-    int partition(int start, int end) {
-        int pivot = nums[start];
-        int j = start + 1;
-        for(int i = start + 1; i <= end; i++) {
-            int n = nums[i];
-            if (n >= pivot) { swap(i, j++); }
-        }
-        swap(start, j - 1);
-        return j - 1;
+    int quickSelect(int[] nums, int l, int r, int k) {
+        int p = partition(nums, l, r);
+        if (p == k) return nums[k];
+        if (p > k) return quickSelect(nums, l, p - 1, k);
+        return quickSelect(nums, p + 1, r, k);
     }
     
-    void quickSelect(int start, int end, int k) {
-        int p = partition(start, end);
+    int partition(int[] nums, int l, int r) {
+        int pivot = nums[l];
+        int i = l + 1;
         
-        if (p == k) return;
-        
-        if (p < k) {
-            quickSelect(p + 1, end, k);
-        } else {
-            quickSelect(start, p - 1, k);
+        for(int j = l + 1; j <= r; j++) {
+            if (nums[j] >= pivot) {
+                swap(nums, j, i++);
+            }
         }
+        
+        swap(nums, i - 1, l);
+        return i - 1;
     }
     
-    void swap(int a, int b) {
+    void swap(int[] nums, int a, int b) {
         int tmp = nums[a];
         nums[a] = nums[b];
         nums[b] = tmp;
