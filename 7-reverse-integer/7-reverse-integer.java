@@ -9,7 +9,7 @@ class Solution {
         
         while(k != 0) {
             if (x > 0 && (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && k % 10 > 7))) return 0;
-            if (x < 0 && (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && k % 10 > 8))) return 0;
+            if (x < 0 && (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && k % 10 < -8))) return 0;
             res = res * 10 + k % 10;
             if (res > 0 && x < 0) res = -res;
             k /= 10;
