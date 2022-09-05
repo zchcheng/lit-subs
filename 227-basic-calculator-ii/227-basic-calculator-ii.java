@@ -1,43 +1,39 @@
 class Solution {
     public int calculate(String s) {
-        s = s.replace(" ", "");
+        Deque<Integer> stack = new LinkedList<>();
         
-        char[] charArr = s.toCharArray();
-        Stack<Integer> stack = new Stack<>();
-        int i = 0;
-        
-        {
-            int[] p = getNextNumber(charArr, 0);
-            int n = p[0];
-            i = p[1];
-            stack.push(n);
+        int cur = 0;
+        Character op = '+';
+        for(char c : s.toCharArray()) {
+            if (c == ' ') continue;
+            
+            if (Character.isDigit(c)) {
+                cur = cur * 10 + Character.getNumericValue(c);
+                continue;
+            }
+            
+            if (op == '*') {
+                stack.push(stack.pop() * cur);
+            } else if (op == '/') {
+                stack.push(stack.pop() / cur);
+            } else if (op == '-') {
+                stack.push(-cur);
+            } else {
+                stack.push(cur);
+            }
+            
+            op = c;
+            cur = 0;
         }
         
-        for(; i < charArr.length;) {
-            char c = charArr[i++];
-            int[] p = getNextNumber(charArr, i);
-            int n = p[0];
-            i = p[1];
-            
-            if (c == '+') {
-                stack.push(n);
-                continue;
-            }
-            
-            if (c == '-') {
-                stack.push(-n);
-                continue;
-            }
-            
-            if (c == '*') {
-                stack.push(stack.pop() * n);
-                continue;
-            }
-            
-            if (c == '/') {
-                stack.push(stack.pop() / n);
-                continue;
-            }
+        if (op == '*') {
+            stack.push(stack.pop() * cur);
+        } else if (op == '/') {
+            stack.push(stack.pop() / cur);
+        } else if (op == '-') {
+            stack.push(-cur);
+        } else {
+            stack.push(cur);
         }
         
         int res = 0;
@@ -47,16 +43,5 @@ class Solution {
         }
         
         return res;
-    }
-    
-    int[] getNextNumber(char[] arr, int curIdx) {
-        int s = 0;
-        
-        int i = curIdx;
-        for(; i < arr.length && Character.isDigit(arr[i]); i++) {
-            s = s * 10 + Character.getNumericValue(arr[i]);
-        }
-        
-        return new int[] { s, i };
     }
 }
