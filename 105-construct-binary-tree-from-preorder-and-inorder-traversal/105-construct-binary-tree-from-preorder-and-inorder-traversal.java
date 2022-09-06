@@ -15,36 +15,30 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer, Integer> index = new HashMap<>();
+        
+        Map<Integer, Integer> idx = new HashMap<>();
         
         for(int i = 0; i < inorder.length; i++) {
-            index.put(inorder[i], i);
+            idx.put(inorder[i], i);
         }
         
-        TreeNode result = helper(new int[] {
-            0, preorder.length, 0, inorder.length - 1
-        }, preorder, inorder, index);
-        return result;
+        return helper(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, idx);
     }
     
-    TreeNode helper(int[] n, int[] preorder, int[] inorder, Map<Integer, Integer> index) {
-        if (n[1] <= 0) return null;
+    TreeNode helper(int[] preorder, int sp, int ep, int[] inorder, int si, int ei, Map<Integer, Integer> idx) {
+        if (sp > ep) {
+            return null;
+        }
         
-        int v = preorder[n[0]];
-        TreeNode node = new TreeNode(v);
+        TreeNode res = new TreeNode(preorder[sp]);
         
-        int idx = index.get(v);
-        int ln = idx - n[2];
-        int rn = n[3] - idx;
+        int i = idx.get(preorder[sp]);
+        int lsz = i - si;
+        int rsz = ei - i;
         
-        node.left = helper(new int[] {
-            n[0] + 1, ln, n[2], idx - 1
-        }, preorder, inorder, index);
+        res.left = helper(preorder, sp + 1, sp + lsz, inorder, si, i - 1, idx);
+        res.right = helper(preorder, sp + lsz + 1, ep, inorder, i + 1, ei, idx);
         
-        node.right = helper(new int[] {
-            n[0] + ln + 1, rn, idx + 1, n[3]
-        }, preorder, inorder, index);
-        
-        return node;
+        return res;
     }
 }
