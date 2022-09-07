@@ -46,6 +46,12 @@ class Solution {
         if (nextNode.hasWord && !nextNode.added) {
             res.add(nextNode.word);
             nextNode.added = true;
+            
+            if (nextNode.next.isEmpty()) {
+                node.next.remove(c);
+                board[i][j] = c;
+                return;
+            }
         }
         
         for(int[] mv : new int[][] {
@@ -58,6 +64,8 @@ class Solution {
             
             helper(nextNode, ni, nj, board);
         }
+        
+        if (nextNode.next.isEmpty()) node.next.remove(c);
         
         board[i][j] = c;
     }
