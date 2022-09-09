@@ -53,11 +53,4 @@ class Solution {
         
         return new ListNode[] { res.next, head };
     }
-    
-    void print(ListNode node) {
-        while(node != null) {
-            System.out.print(node.val + " ");
-        }
-        System.out.println();
-    }
 }
