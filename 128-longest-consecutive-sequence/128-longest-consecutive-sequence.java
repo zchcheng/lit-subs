@@ -8,22 +8,15 @@ class Solution {
             set.add(n);
         }
         
-        Map<Integer, Integer> map = new HashMap<>();
-        
         for(int n : nums) {
-            if (map.containsKey(n)) continue;
+            if (set.contains(n - 1)) continue;
             
-            int cur = n, con = 1;
+            int con = 1, cur = n;
+            
             while(set.contains(cur + 1)) {
-                if (map.containsKey(cur + 1)) {
-                    con += map.get(cur + 1);
-                    break;
-                }
                 con++;
                 cur++;
             }
-            
-            map.put(n, con);
             
             res = Math.max(res, con);
         }
