@@ -5,9 +5,7 @@ class Solution {
         }
         
         for(int i = 0; i < nums.length; i++) {
-            if (nums[i] > 0) {
-                helper(nums, nums[i]);
-            }
+            helper(nums, nums[i]);
         }
         
         for(int i = 0; i < nums.length; i++) {
