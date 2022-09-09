@@ -15,24 +15,29 @@
  */
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (root == null) return res;
-        helper(root, targetSum, new LinkedList<>(), res);
-        return res;
+        return dfs(root, targetSum);
     }
     
-    void helper(TreeNode root, int targetSum, LinkedList<Integer> current, List<List<Integer>> res) {
-        targetSum -= root.val;
+    List<List<Integer>> dfs(TreeNode root, int targetSum) {
+        List<List<Integer>> result = new ArrayList<>();
         
+        if (root != null) dfsHelper(root, targetSum, new ArrayList<>(), result);
+        
+        return result;
+    }
+    
+    void dfsHelper(TreeNode root, int sum, List<Integer> current, List<List<Integer>> result) {
         current.add(root.val);
         
         if (root.left == null && root.right == null) {
-            if (targetSum == 0) res.add(List.copyOf(current));
-        } else {
-            if (root.left != null) helper(root.left, targetSum, current, res);
-            if (root.right != null) helper(root.right, targetSum, current, res);
+            if (root.val == sum) result.add(List.copyOf(current));
+            current.remove(current.size() - 1);
+            return;
         }
         
-        current.removeLast();
+        if (root.left != null) dfsHelper(root.left, sum - root.val, current, result);
+        if (root.right != null) dfsHelper(root.right, sum - root.val, current, result);
+        
+        current.remove(current.size() - 1);
     }
 }
