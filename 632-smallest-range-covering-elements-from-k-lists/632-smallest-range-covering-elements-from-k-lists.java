@@ -14,15 +14,12 @@ class Solution {
         
         res = new int[] {cur[0], cur[1]};
         
-        System.out.println(res[0] + " - " + res[1]);
-        
         while(!pq.isEmpty()) {
             int[] p = pq.poll();
             
             cur[0] = Math.max(cur[0], p[0]);
             
             if (cur[1] - cur[0] < res[1] - res[0]) {
-                //System.out.println(res[0] + " - " + res[1] + " -> " + cur[0] + " - " + cur[1]);
                 res[0] = cur[0];
                 res[1] = cur[1];
             }
