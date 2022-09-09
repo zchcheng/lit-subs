@@ -14,24 +14,42 @@
  * }
  */
 class Solution {
-    Map<Integer, long[]> map = new HashMap<>();
-    long res = 0;
-        
     public int widthOfBinaryTree(TreeNode root) {
-        helper(root, 1, 0);
+        long res = 0;
+        
+        Queue<Node> queue = new LinkedList<>();
+        
+        if (root != null) queue.offer(new Node(root, 0));
+        
+        while(!queue.isEmpty()) {
+            int sz = queue.size();
+            
+            long min = Long.MAX_VALUE;
+            long max = Long.MIN_VALUE;
+            
+            for(int i = 0; i < sz; i++) {
+                Node p = queue.poll();
+                
+                min = Math.min(p.offset, min);
+                max = Math.max(p.offset, max);
+                
+                if (p.node.left != null) queue.offer(new Node(p.node.left, p.offset * 2));
+                if (p.node.right != null) queue.offer(new Node(p.node.right, p.offset * 2 + 1));
+            }
+            
+            res = Math.max(res, max - min + 1);
+        }
+        
         return (int)res;
     }
     
-    void helper(TreeNode root, long offset, int lvl) {
-        if (root == null) return;
+    class Node {
+        public TreeNode node;
+        public long offset;
         
-        long[] b = map.computeIfAbsent(lvl, k -> new long[] {offset, offset});
-        b[0] = Math.min(b[0], offset);
-        b[1] = Math.max(b[1], offset);
-        
-        res = Math.max(res, b[1] - b[0] + 1);
-        
-        helper(root.left, 2 * offset - 1, lvl + 1);
-        helper(root.right, 2 * offset, lvl + 1);
+        public Node(TreeNode node, long offset) {
+            this.node = node;
+            this.offset = offset;
+        }
     }
 }
