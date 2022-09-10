@@ -1,16 +1,20 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-        int[] bucket = new int[26];
         int res = 0;
+        int l = -1;
         
-        for(int i = 0, curMax = 0; i < s.length(); i++) {
+        int[] bucket = new int[26];
+        
+        for(int i = 0, con = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            curMax = Math.max(curMax, ++bucket[c - 'A']);
-            if (res - curMax < k) {
-                res++;
-            } else {
-                bucket[s.charAt(i - res) - 'A']--;
+            
+            con = Math.max(con, ++bucket[c - 'A']);
+            
+            if (i - l - con > k) {
+                bucket[s.charAt(++l) - 'A']--;
             }
+            
+            res = Math.max(res, i - l);
         }
         
         return res;
