@@ -1,16 +1,23 @@
 class Solution {
-    public List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        helper("", 0, 0, n, res);
-        return res;
-    }
+    Map<Integer, List<String>> memo = new HashMap<>();
     
-    void helper(String s, int open, int close, int n, List<String> res) {
-        if (open == n && close == n) {
-            res.add(s);
-            return;
+    public List<String> generateParenthesis(int n) {
+        if (n == 0) return List.of("");
+        
+        if (memo.containsKey(n)) return memo.get(n);
+        
+        List<String> res = new ArrayList<>();
+        
+        for(int i = 0; i < n; i++) {
+            for(String s1 : generateParenthesis(i)) {
+                for(String s2 : generateParenthesis(n - i - 1)) {
+                    res.add(s1 + "(" + s2 + ")");
+                }
+            }
         }
-        if (open < n) helper(s + "(", open + 1, close, n, res);
-        if (close < open) helper(s + ")", open, close + 1, n, res);
+        
+        memo.put(n, res);
+        
+        return res;
     }
 }
