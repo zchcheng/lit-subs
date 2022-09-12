@@ -10,43 +10,51 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
+        return mergeSort(head);
+    }
+    
+    ListNode mergeSort(ListNode head) {
         if (head == null) return null;
         if (head.next == null) return head;
         
-        ListNode mid = findMid(head);
-        ListNode second = mid.next;
+        ListNode[] heads = partition(head);
         
-        mid.next = null;
-        
-        ListNode sorted1 = sortList(head);
-        ListNode sorted2 = sortList(second);
+        ListNode head1 = mergeSort(heads[0]);
+        ListNode head2 = mergeSort(heads[1]);
         
         ListNode res = new ListNode();
-        ListNode cur = res;
+        ListNode current = res;
         
-        while(sorted1 != null || sorted2 != null) {
-            int v1 = (sorted1 == null)? Integer.MAX_VALUE : sorted1.val;
-            int v2 = (sorted2 == null)? Integer.MAX_VALUE : sorted2.val;
-            
-            if (v1 <= v2) {
-                cur.next = sorted1;
-                cur = cur.next;
-                sorted1 = sorted1.next;
-                cur.next = null;
+        while(head1 != null || head2 != null) {
+            if (head1 != null && (head2 == null || head1.val <= head2.val)) {
+                ListNode next = head1.next;
+                current.next = head1;
+                head1 = next;
             } else {
-                cur.next = sorted2;
-                cur = cur.next;
-                sorted2 = sorted2.next;
-                cur.next = null;
+                ListNode next = head2.next;
+                current.next = head2;
+                head2 = next;
             }
+            current = current.next;
         }
+        
+        current.next = null;
         
         return res.next;
     }
     
-    ListNode findMid(ListNode head) {
-        ListNode fast = head, slow = head;
-        for(; fast != null && fast.next != null && fast.next.next != null; fast = fast.next.next, slow = slow.next);
-        return slow;
+    ListNode[] partition(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        while(fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        ListNode[] res = new ListNode[] { head, slow.next };
+        slow.next = null;
+        
+        return res;
     }
 }
