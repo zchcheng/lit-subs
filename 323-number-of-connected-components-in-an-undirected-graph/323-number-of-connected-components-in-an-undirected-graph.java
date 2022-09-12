@@ -1,31 +1,37 @@
 class Solution {
-    int[] grp = null;
-        
+    int[] group = null;
+    
     public int countComponents(int n, int[][] edges) {
-        grp = new int[n];
+        group = new int[n];
         
-        for(int i = 0; i < n; i++) grp[i] = i;
-        
-        for(int[] edge : edges) union(edge[0], edge[1]);
-        
-        Set<Integer> set = new HashSet<>();
-        
-        for(int i = 0; i < n; i++) set.add(find(i));
-        
-        return set.size();
-    }
-    
-    int find(int i) {
-        if (grp[i] != i) {
-            int g = find(grp[i]);
-            grp[i] = g;
+        for(int i = 0; i < n; i++) {
+            group[i] = i;
         }
-        return grp[i];
+        
+        for(int[] edge : edges) {
+            join(edge[0], edge[1]);
+        }
+        
+        Set<Integer> res = new HashSet<>();
+        
+        for(int i = 0; i < n; i++) {
+            res.add(findGroup(i));
+        }
+        
+        return res.size();
     }
     
-    void union(int a, int b) {
-        int ga = find(a);
-        int gb = find(b);
-        grp[gb] = ga;
+    int findGroup(int n) {
+        if (group[n] != n) {
+            int root = findGroup(group[n]);
+            group[n] = root;
+        }
+        return group[n];
+    }
+    
+    void join(int a, int b) {
+        int grp1 = findGroup(a);
+        int grp2 = findGroup(b);
+        group[grp2] = grp1;
     }
 }
