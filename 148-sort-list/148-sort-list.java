@@ -10,17 +10,78 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
-        return mergeSort(head);
+        return bottomUpMergeSort(head);
     }
     
-    ListNode mergeSort(ListNode head) {
+    ListNode bottomUpMergeSort(ListNode head) {
+        ListNode next = null;
+        ListNode res = new ListNode();
+        res.next = head;
+        
+        for(int sz = 1; ; sz *= 2) {
+            ListNode list1 = res.next;
+            ListNode list2 = getNext(list1, sz);
+            ListNode current = res;
+            
+            if (list2 == null) break;
+            
+            while(list1 != null || list2 != null) {
+                next = getNext(list2, sz);
+                
+                ListNode[] merged = mergeTwoList(list1, list2);
+                
+                current.next = merged[0];
+                current = merged[1];
+                
+                list1 = next;
+                list2 = getNext(list1, sz);
+            }
+        }
+        
+        return res.next;
+    }
+    
+    ListNode getNext(ListNode node, int n) {
+        for(int i = 0; i < n - 1 && node != null; i++) {
+            node = node.next;
+        }
+        
+        if (node == null) return null;
+        
+        ListNode res = node.next;
+        node.next = null;
+        
+        return res;
+    }
+    
+    ListNode[] mergeTwoList(ListNode list1, ListNode list2) {
+        ListNode result = new ListNode();
+        ListNode current = result;
+        
+        while(list1 != null || list2 != null) {
+            if (list1 != null && (list2 == null || list1.val < list2.val)) {
+                current.next = list1;
+                list1 = list1.next;
+            } else {
+                current.next = list2;
+                list2 = list2.next;
+            }
+            current = current.next;
+        }
+        
+        current.next = null;
+        
+        return new ListNode[] { result.next, current };
+    }
+    
+    ListNode topDownMergeSort(ListNode head) {
         if (head == null) return null;
         if (head.next == null) return head;
         
         ListNode[] heads = partition(head);
         
-        ListNode head1 = mergeSort(heads[0]);
-        ListNode head2 = mergeSort(heads[1]);
+        ListNode head1 = topDownMergeSort(heads[0]);
+        ListNode head2 = topDownMergeSort(heads[1]);
         
         ListNode res = new ListNode();
         ListNode current = res;
