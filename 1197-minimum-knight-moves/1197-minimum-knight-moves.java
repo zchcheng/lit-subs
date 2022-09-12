@@ -1,40 +1,26 @@
 class Solution {
+    Map<Pair<Integer, Integer>, Integer> map = new HashMap<>();
+    
     public int minKnightMoves(int x, int y) {
-        return helper(new Loc(Math.abs(x), Math.abs(y)), new HashMap<>());
+        return helper(x, y);
     }
     
-    int helper(Loc loc, Map<Loc, Integer> memo) {
-        if (loc.x == 0 && loc.y == 0) return 0;
-        if (loc.x + loc.y == 2) return 2;
-        if (memo.containsKey(loc)) return memo.get(loc);
+    int helper(int x, int y) {
+        x = Math.abs(x);
+        y = Math.abs(y);
         
-        int res = Math.min(
-            helper(new Loc(Math.abs(loc.x - 2), Math.abs(loc.y - 1)), memo),
-            helper(new Loc(Math.abs(loc.x - 1), Math.abs(loc.y - 2)), memo)
-        ) + 1;
+        Pair<Integer, Integer> p = new Pair(x, y);
         
-        memo.put(loc, res);
+        if (map.containsKey(p)) return map.get(p);
+        
+        if (x == 0 && y == 0) return 0;
+        
+        if (x + y == 2) return 2;
+        
+        int res = Math.min(helper(x - 2, y - 1), helper(x - 1, y - 2)) + 1;
+        
+        map.put(p, res);
         
         return res;
-    }
-    
-    class Loc {
-        int x;
-        int y;
-        
-        public Loc(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        
-        @Override
-        public int hashCode() {
-            return (x + "," + y).hashCode();
-        }
-        
-        @Override
-        public boolean equals(Object o) {
-            return ((Loc)o).x == x && ((Loc)o).y == y;
-        }
     }
 }
