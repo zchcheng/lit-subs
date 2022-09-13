@@ -1,0 +1,64 @@
+class Solution {
+    public int waysToSplit(int[] nums) {
+        // 1 2 2 3 5 0
+        // 1 3 5 8 13 13 -> 13 * 1/3 ~= 4
+        // 1 2 | 5 8 13 13  -> 10 * 1/2 = 5
+        // 1 2 | 2 3 | 5 0
+        // 1 | 12 (1 ~ 6)
+        // 1 | 2 | 2 3 5 0
+        // 1 | 2 2 | 3 5 0
+        
+        int n = nums.length;
+        int[] prefixSum = new int[n];
+        int k = (int)1e9 + 7;
+        
+        for(int i = 0, sum = 0; i < n; i++) {
+            sum += nums[i];
+            prefixSum[i] = sum;
+        }
+        
+        int res = 0;
+        
+        for(int i = n - 1; i >= 0; i--) {
+            if (prefixSum[i] > (prefixSum[n - 1] - prefixSum[i]) / 2) continue;
+            
+            int min = binSearch(prefixSum, i, true);
+            int max = binSearch(prefixSum, i, false);
+            
+            //System.out.println("min: " + min + ", max: " + max);
+            
+            if (min > max || min == -1 || max == -1) continue;
+            
+            res = (res + (max - min + 1) % k) % k;
+        }
+        
+        return res;
+    }
+    
+    int binSearch(int[] prefixSum, int lb, boolean searchLeft) {
+        int l = lb + 1;
+        int r = prefixSum.length - 2;
+        int res = -1;
+        
+        int sl = prefixSum[lb];
+        
+        while(l <= r) {
+            int m = l + (r - l) / 2;
+            
+            int sm = prefixSum[m] - prefixSum[lb];
+            int sr = prefixSum[prefixSum.length - 1] - prefixSum[m];
+            
+            //System.out.println("sum of left(" + lb + "): " + sl + ", sum of mid(" + m + "): " + sm + ", sum of right: " + sr);
+            
+            if (sl <= sm && sm <= sr) {
+                res = m;
+                if (searchLeft) r = m - 1;
+                else l = m + 1;
+            } 
+            else if (sm < sl) l = m + 1;
+            else r = m - 1;
+        }
+        
+        return res;
+    }
+}
