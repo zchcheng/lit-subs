@@ -1,21 +1,20 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        wordList.add(beginWord);
-        int n = wordList.size();
+        if (beginWord.equals(endWord)) return 1;
         
         Map<String, Set<String>> edges = new HashMap<>();
         
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < wordList.size() - 1; i++) {
             String a = wordList.get(i);
             
-            for(int j = i + 1; j < n; j++) {
+            for(int j = i + 1; j < wordList.size(); j++) {
                 String b = wordList.get(j);
                 
-                if (isLinked(a, b)) {
-                    Set<String> la = edges.computeIfAbsent(a, k -> new HashSet<>());
-                    Set<String> lb = edges.computeIfAbsent(b, k -> new HashSet<>());
-                    la.add(b);
-                    lb.add(a);
+                if (connected(a, b)) {
+                    Set<String> s1 = edges.computeIfAbsent(a, k -> new HashSet<>());
+                    Set<String> s2 = edges.computeIfAbsent(b, k -> new HashSet<>());
+                    s1.add(b);
+                    s2.add(a);
                 }
             }
         }
@@ -23,38 +22,47 @@ class Solution {
         Queue<String> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
         
-        queue.offer(beginWord);
         visited.add(beginWord);
         
-        int turn = 1;
+        for(int i = 0; i < wordList.size(); i++) {
+            String w = wordList.get(i);
+            if (visited.contains(w)) continue;
+            if (connected(beginWord, w)) {
+                queue.offer(w);
+                visited.add(w);
+            }
+        }
+        
+        int len = 2;
+        
         while(!queue.isEmpty()) {
             int sz = queue.size();
             
             for(int i = 0; i < sz; i++) {
-                String s = queue.poll();
+                String w = queue.poll();
+                if (w.equals(endWord)) return len;
                 
-                if (s.equals(endWord)) return turn;
-                
-                Set<String> linked = edges.getOrDefault(s, new HashSet<>());
-                
-                for(String l : linked) {
-                    if (visited.contains(l)) continue;
-                    queue.offer(l);
-                    visited.add(l);
+                for(String connect : edges.getOrDefault(w, new HashSet<>())) {
+                    if (visited.contains(connect)) continue;
+                    queue.offer(connect);
+                    visited.add(connect);
                 }
             }
             
-            turn++;
+            len++;
         }
-        
+            
         return 0;
     }
     
-    boolean isLinked(String a, String b) {
-        int diff = 0;
-        for(int i = 0; i < a.length() && diff <= 1; i++) {
-            if (a.charAt(i) != b.charAt(i)) diff++;
+    boolean connected(String a, String b) {
+        boolean flag = false;
+        for(int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                if (flag) return false;
+                flag = true;
+            }
         }
-        return diff <= 1;
+        return true;
     }
 }
