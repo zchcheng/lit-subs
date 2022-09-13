@@ -1,36 +1,31 @@
 class Solution {
     public int calculate(String s) {
-        Deque<Integer> stack = new LinkedList<>();
-        int cur = 0;
-        Character op = '+';
+        Stack<Integer> stack = new Stack<>();
         
-        for(int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
+        char previousOp = '+';
+        
+        for(int i = 0, current = 0; i <= s.length(); i++) {
+            char c = (i == s.length())? '+' : s.charAt(i);
+            
+            if (c == ' ') continue;
             
             if (Character.isDigit(c)) {
-                cur = cur * 10 + Character.getNumericValue(c);
+                current = current * 10 + Character.getNumericValue(c);
+                continue;
             }
             
-            if ((c != ' ' && !Character.isDigit(c)) || i == s.length() - 1) {
-                if (op == '*') {
-                    stack.push(stack.pop() * cur);
-                } else if (op == '/') {
-                    stack.push(stack.pop() / cur);
-                } else if (op == '-') {
-                    stack.push(-cur);
-                } else {
-                    stack.push(cur);
-                }
-                op = c;
-                cur = 0;
-            }
+            if (previousOp == '*') stack.push(stack.pop() * current);
+            if (previousOp == '/') stack.push(stack.pop() / current);
+            if (previousOp == '-') stack.push(-current);
+            if (previousOp == '+') stack.push(current);
+            
+            current = 0;
+            previousOp = c;
         }
         
         int res = 0;
         
-        while(!stack.isEmpty()) {
-            res += stack.pop();
-        }
+        while(!stack.isEmpty()) res += stack.pop();
         
         return res;
     }
