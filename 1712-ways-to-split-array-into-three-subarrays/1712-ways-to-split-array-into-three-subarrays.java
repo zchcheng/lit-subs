@@ -28,7 +28,6 @@ class Solution {
     int binSearch(int[] prefixSum, int lb, boolean searchLeft) {
         int l = lb + 1;
         int r = prefixSum.length - 2;
-        int res = -1;
         
         int sl = prefixSum[lb];
         
@@ -39,7 +38,6 @@ class Solution {
             int sr = prefixSum[prefixSum.length - 1] - prefixSum[m];
             
             if (sl <= sm && sm <= sr) {
-                res = m;
                 if (searchLeft) r = m - 1;
                 else l = m + 1;
             } 
@@ -47,6 +45,6 @@ class Solution {
             else r = m - 1;
         }
         
-        return res;
+        return (searchLeft)? l : r;
     }
 }
