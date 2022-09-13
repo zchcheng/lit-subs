@@ -1,38 +1,35 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        Map<Integer, List<Integer>> deps = new HashMap<>();
-        int[] numOfDep = new int[numCourses];
+        int[] inDegree = new int[numCourses];
+        Map<Integer, Set<Integer>> dep = new HashMap<>();
         
-        for(int[] pre : prerequisites) {
-            int course = pre[0];
-            int dep = pre[1];
-            List<Integer> dc = deps.computeIfAbsent(dep, k -> new ArrayList<Integer>());
-            dc.add(course);
-            numOfDep[course] += 1;
+        for(int[] p : prerequisites) {
+            inDegree[p[0]]++;
+            Set<Integer> d = dep.computeIfAbsent(p[1], k -> new HashSet<>());
+            d.add(p[0]);
         }
         
         Queue<Integer> queue = new LinkedList<>();
         
         for(int i = 0; i < numCourses; i++) {
-            if (numOfDep[i] == 0) {
-                queue.offer(i);
-            }
+            if (inDegree[i] == 0) queue.offer(i);
         }
         
         while(!queue.isEmpty()) {
-            int dep = queue.poll();
-            List<Integer> list = deps.getOrDefault(dep, new ArrayList<>());
-            for(int c : list) {
-                if (--numOfDep[c] <= 0) {
-                    queue.offer(c);
-                }
+            int c = queue.poll();
+            
+            Set<Integer> s = dep.getOrDefault(c, new HashSet<>());
+            
+            for(int el : s) {
+                inDegree[el]--;
+                if (inDegree[el] <= 0) queue.offer(el);
             }
         }
         
-        boolean result = true;
+        for(int id : inDegree) {
+            if (id != 0) return false;
+        }
         
-        for(int i = 0; i < numCourses; i++) result = result && numOfDep[i] == 0;
-        
-        return result;
+        return true;
     }
 }
