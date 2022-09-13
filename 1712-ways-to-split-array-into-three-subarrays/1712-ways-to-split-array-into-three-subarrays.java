@@ -1,13 +1,5 @@
 class Solution {
     public int waysToSplit(int[] nums) {
-        // 1 2 2 3 5 0
-        // 1 3 5 8 13 13 -> 13 * 1/3 ~= 4
-        // 1 2 | 5 8 13 13  -> 10 * 1/2 = 5
-        // 1 2 | 2 3 | 5 0
-        // 1 | 12 (1 ~ 6)
-        // 1 | 2 | 2 3 5 0
-        // 1 | 2 2 | 3 5 0
-        
         int n = nums.length;
         int[] prefixSum = new int[n];
         int k = (int)1e9 + 7;
@@ -24,8 +16,6 @@ class Solution {
             
             int min = binSearch(prefixSum, i, true);
             int max = binSearch(prefixSum, i, false);
-            
-            //System.out.println("min: " + min + ", max: " + max);
             
             if (min > max || min == -1 || max == -1) continue;
             
@@ -47,8 +37,6 @@ class Solution {
             
             int sm = prefixSum[m] - prefixSum[lb];
             int sr = prefixSum[prefixSum.length - 1] - prefixSum[m];
-            
-            //System.out.println("sum of left(" + lb + "): " + sl + ", sum of mid(" + m + "): " + sm + ", sum of right: " + sr);
             
             if (sl <= sm && sm <= sr) {
                 res = m;
