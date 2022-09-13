@@ -17,7 +17,7 @@ class Solution {
             int min = binSearch(prefixSum, i, true);
             int max = binSearch(prefixSum, i, false);
             
-            if (min > max || min == -1 || max == -1) continue;
+            if (min > max) continue;
             
             res = (res + (max - min + 1) % k) % k;
         }
