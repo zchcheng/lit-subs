@@ -11,8 +11,8 @@ class Solution {
         
         int res = 0;
         
-        for(int i = n - 1; i >= 0; i--) {
-            if (prefixSum[i] > (prefixSum[n - 1] - prefixSum[i]) / 2) continue;
+        for(int i = n - 3; i >= 0; i--) {
+            if (prefixSum[i] * 2 > prefixSum[n - 1] - prefixSum[i]) continue;
             
             int min = binSearch(prefixSum, i, true);
             int max = binSearch(prefixSum, i, false);
