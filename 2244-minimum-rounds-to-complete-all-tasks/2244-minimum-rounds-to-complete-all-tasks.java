@@ -1,12 +1,5 @@
 class Solution {
     public int minimumRounds(int[] tasks) {
-        // task difficulty level: 1 -> return -1
-        // task difficulty level: 2 -> return 1
-        // task difficulty level: 3 -> return 1 -> 3k
-        // task difficulty level: 4 -> return 2 -> 3k+1 -> 3(k - 1) + 4(2) -> 1-1(0) + 2 = 2
-        //                        5 -> return 2 -> 3k+2
-        //                                      
-        
         Map<Integer, Integer> occurence = new HashMap<>();
         Map<Integer, Integer> numOfOccurence = new HashMap<>();
         
