@@ -1,18 +1,19 @@
 class Solution {
     public int minimumAverageDifference(int[] nums) {
-        long[] prefixSum = new long[nums.length];
+        long sumOfNums = 0;
         
-        for(long i = 0, sum = 0; i < nums.length; i++) {
-            sum += nums[(int)i];
-            prefixSum[(int)i] = sum;
+        for(int i = 0; i < nums.length; i++) {
+            sumOfNums += nums[i];
         }
         
         long min = Long.MAX_VALUE;
         int minIdx = -1;
         
+        long currentSum = 0;
         for(int i = 0; i < nums.length; i++) {
-            long avgFirst = prefixSum[i] / (i + 1);
-            long avgSecond = (i == nums.length - 1)? 0 : (prefixSum[nums.length - 1] - prefixSum[i]) / (nums.length - i - 1);
+            currentSum += nums[i];
+            long avgFirst = currentSum / (i + 1);
+            long avgSecond = (i == nums.length - 1)? 0 : (sumOfNums - currentSum) / (nums.length - i - 1);
             
             long diff = Math.abs(avgFirst - avgSecond);
             
