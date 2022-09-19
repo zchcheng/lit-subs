@@ -30,24 +30,32 @@ class Solution {
     }
 
     public int cutOffTree(List<List<Integer>> forest) {
-        List<int[]> trees = new ArrayList();
-        for (int r = 0; r < forest.size(); ++r) {
-            for (int c = 0; c < forest.get(0).size(); ++c) {
-                int v = forest.get(r).get(c);
-                if (v > 1) trees.add(new int[]{v, r, c});
+        List<int[]> trees = new ArrayList<>();
+        
+        for(int i = 0; i < forest.size(); ++i) {
+            for(int j = 0; j < forest.get(0).size(); ++j) {
+                int h = forest.get(i).get(j);
+                if (h <= 1) continue;
+                trees.add(new int[] { h, i, j });
             }
         }
-
-        Collections.sort(trees, (a, b) -> Integer.compare(a[0], b[0]));
-
-        int ans = 0, sr = 0, sc = 0;
-        for (int[] tree: trees) {
-            int d = minSteps(forest, sr, sc, tree[1], tree[2]);
-            if (d < 0) return -1;
-            ans += d;
-            sr = tree[1]; sc = tree[2];
-        }
-        return ans;
         
+        Collections.sort(trees, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        int result = 0;
+        
+        int sr = 0, sc = 0;
+        for(int[] current: trees) {
+            int step = minSteps(forest, sr, sc, current[1], current[2]);
+            
+            if (step < 0) return -1;
+            
+            result += step;
+            
+            sr = current[1];
+            sc = current[2];
+        }
+        
+        return result;
     }
 }
