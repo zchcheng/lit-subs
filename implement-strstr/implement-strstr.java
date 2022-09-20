@@ -7,8 +7,6 @@ class Solution {
             
             j = findPattern(lps, c, needle, j);
             
-            System.out.println(j);
-            
             if (j == needle.length()) return i - needle.length() + 1;
         }
         
@@ -16,10 +14,7 @@ class Solution {
     }
     
     int findPattern(int[] lps, char c, String needle, int idx) {
-        System.out.println(c);
-        
         while(idx >= 0) {
-            System.out.println(needle.charAt(lps[idx]));
             if (c == needle.charAt(idx)) return idx + 1;
             if (idx == 0) break;
             idx = lps[idx - 1];
