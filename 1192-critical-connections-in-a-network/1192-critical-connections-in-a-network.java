@@ -23,8 +23,6 @@ class Solution {
             
             int minRank = helper(neighbor, current, currentRank);
             
-            //System.out.println("min of " + current + " - " + neighbor + " : " + minRank);
-            
             if (minRank == currentRank + 1) {
                 result.add(List.of(current, neighbor));
             }
