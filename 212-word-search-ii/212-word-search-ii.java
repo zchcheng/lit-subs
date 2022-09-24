@@ -1,79 +1,68 @@
 class Solution {
-    List<String> res = new ArrayList<>();
+    final int[][] moves = new int[][] {
+        {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+    };
+    
+    List<String> result = new ArrayList<>();
+    Trie root = new Trie();
     
     public List<String> findWords(char[][] board, String[] words) {
-        Trie root = buildTrie(words);
+        buildTrie(words);
         
-        for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
-                if (root.next.containsKey(board[i][j])) 
-                    helper(root, i, j, board);
+        int r = board.length;
+        int c = board[0].length;
+        
+        for(int i = 0; i < r; i++) {
+            for(int j = 0; j < c; j++) {
+                dfs(board, i, j, root);
             }
         }
         
-        return res;
+        return result;
     }
     
-    Trie buildTrie(String[] words) {
-        Trie root = new Trie();
+    void dfs(char[][] board, int x, int y, Trie root) {
+        char c = board[x][y];
         
-        for(String word : words) {
-            Trie cur = root;
-            
-            for(int i = 0; i < word.length(); i++) {
-                char c = word.charAt(i);
-                cur = cur.next.computeIfAbsent(c, k -> new Trie());
-            }
-            
-            cur.hasWord = true;
-            cur.word = word;
+        if (!root.next.containsKey(c)) return;
+        
+        Trie next = root.next.get(c);
+        
+        board[x][y] = '#';
+        
+        if (next.word != null) {
+            result.add(next.word);
+            next.word = null;
         }
         
-        return root;
+        for(int[] move : moves) {
+            int nx = x + move[0];
+            int ny = y + move[1];
+            
+            if (nx < 0 || ny < 0 || nx >= board.length || ny >= board[0].length) continue;
+            
+            dfs(board, nx, ny, next);
+        }
+        
+        if (next.word == null && next.next.isEmpty()) root.next.remove(c);
+        
+        board[x][y] = c;
     }
     
-    void helper(Trie node, int i, int j, char[][] board) {
-        char c = board[i][j];
-        board[i][j] = '#';
-        
-        Trie nextNode = node.next.get(c);
-        
-        if (nextNode == null) {
-            board[i][j] = c;
-            return;
-        }
-        
-        if (nextNode.hasWord && !nextNode.added) {
-            res.add(nextNode.word);
-            nextNode.added = true;
+    void buildTrie(String[] words) {
+        for(String w : words) {
+            Trie current = root;
             
-            if (nextNode.next.isEmpty()) {
-                node.next.remove(c);
-                board[i][j] = c;
-                return;
+            for(char c : w.toCharArray()) {
+                current = current.next.computeIfAbsent(c, k -> new Trie());
             }
-        }
-        
-        for(int[] mv : new int[][] {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
-        }) {
-            int ni = i + mv[0];
-            int nj = j + mv[1];
             
-            if (ni < 0 || nj < 0 || ni >= board.length || nj >= board[0].length || board[ni][nj] == '#') continue;
-            
-            helper(nextNode, ni, nj, board);
+            current.word = w;
         }
-        
-        if (nextNode.next.isEmpty()) node.next.remove(c);
-        
-        board[i][j] = c;
     }
     
     class Trie {
         public Map<Character, Trie> next = new HashMap<>();
-        public boolean hasWord = false;
-        public boolean added = false;
-        public String word = "";
+        String word = null;
     }
 }
