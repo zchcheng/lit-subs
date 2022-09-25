@@ -6,6 +6,7 @@ class Solution {
         
         for(int i = 0; i < books.length; i++) {
             int j = i - 1;
+            
             while(!stack.isEmpty() && books[stack.peek()] >= books[i] - (i - stack.peek())) {
                 stack.pop();
                 
@@ -14,12 +15,7 @@ class Solution {
             }
             
             long v = (j == -1)? 0 : dp[j];
-            
-            long k = Math.max(books[i] - (i - j - 1), 1);
-            
-            long s = ssum(books[i], k);
-            
-            System.out.println(i + ", " + j + ", " + k + ", " + s + ", " + (s + v));
+            long s = ssum(books[i], Math.max(books[i] - (i - j - 1), 1));
             
             dp[i] = s + v;
             
