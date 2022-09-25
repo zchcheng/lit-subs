@@ -22,6 +22,7 @@ class Solution {
             
             for(int i = 0; i <= greatest[1]; i++) {
                 int n = nums[i];
+                
                 while (!stack.isEmpty() && stack.peek()[0] < n) {
                     int[] p = stack.pop();
                     result[p[1]] = n;
