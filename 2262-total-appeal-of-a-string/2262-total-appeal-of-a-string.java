@@ -8,9 +8,7 @@ class Solution {
         
         for(int i = 0; i < s.length(); i++) {
             int c = s.charAt(i) - 'a';
-            int pi = prevIdx[c];
-            
-            roc[i] = pi + 1;
+            roc[i] = prevIdx[c] + 1;
             prevIdx[c] = i;
         }
         
