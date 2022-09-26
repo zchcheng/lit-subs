@@ -14,8 +14,6 @@ class Solution {
             }
         }
         
-        printList(list);
-        
         int[] result = new int[queries.length];
         
         for(int i = 0; i < queries.length; i++) {
@@ -65,19 +63,11 @@ class Solution {
             tail = r;
         }
         
-        System.out.println("tail: " + tail);
-        
         if (head >= list.size() || tail < 0) return 0;
         
         int[] ph = list.get(head);
         int[] pt = list.get(tail);
         
         return Math.max(pt[1] - ph[0] - (tail - head + 1), 0);
-    }
-    
-    void printList(List<int[]> list) {
-        for(int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i)[0] + ", " + list.get(i)[1]);
-        }
     }
 }
