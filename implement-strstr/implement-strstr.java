@@ -2,8 +2,6 @@ class Solution {
     public int strStr(String haystack, String needle) {
         int[] lps = buildLPS(needle);
         
-        for(int n: lps) System.out.println("->" + n);
-        
         for(int i = 0, j = -1; i < haystack.length(); i++) {
             j = findPattern(lps, haystack.charAt(i), j, needle);
             if (j == needle.length() - 1) return i - needle.length() + 1;
@@ -21,10 +19,7 @@ class Solution {
                 break;
             }
             idx = lps[idx - 1] + 1;
-            System.out.println("roll to prev: " + idx);
         }
-        
-        System.out.println(idx);
         
         return idx;
     }
