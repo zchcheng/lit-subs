@@ -57,16 +57,6 @@ class LRUCache {
         add(node);
     }
     
-        
-    void print() {
-        DDLNode current = head.next;
-        System.out.print("List: ");
-        while(current != null) {
-            System.out.print("[" + current.key + ", " + current.value + "] ");
-            current = current.next;
-        }
-        System.out.println();
-    }
     
     class DDLNode {
         public int key;
