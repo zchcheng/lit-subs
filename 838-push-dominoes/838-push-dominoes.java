@@ -3,44 +3,39 @@ class Solution {
         char[] arr = new char[d.length()];
         Arrays.fill(arr, '.');
         
-        int prevR = -1;
-        int prevL = -1;
+        int pR = -1, pL = -1;
         for(int i = 0; i < d.length(); i++) {
             char c = d.charAt(i);
             
             if (c == '.') continue;
             
             if (c == 'R') {
-                if (prevR > prevL) {
-                    for(int j = prevR; j <= i; j++) arr[j] = 'R';
-                }
-                prevR = i;
+                if (pR > pL) fill(arr, pR, i, 'R');
+                pR = i;
                 continue;
             }
             
-            if (prevL >= prevR) {
-                for(int j = prevL + 1; j <= i; j++) arr[j] = 'L';
-            } else {
-                int mid = (prevR + i + 1) / 2;
-
-                for(int j = prevR; j < mid; j++) {
-                    arr[j] = 'R';
-                }
-
-                for(int j = i; j > mid; j--) {
-                    arr[j] = 'L';
-                }
+            if (pL >= pR) fill(arr, pL + 1, i, 'L');
+            else {
+                int mid = (pR + i + 1) / 2;
                 
-                if ((prevR + i) % 2 != 0) arr[mid] = 'L';
+                fill(arr, pR, mid - 1, 'R');
+                fill(arr, mid + 1, i, 'L');
+                
+                if ((pR + i) % 2 != 0) arr[mid] = 'L';
             }
             
-            prevL = i;
+            pL = i;
         }
         
-        if (prevL < prevR) {
-            for(int i = prevR; i < d.length(); i++) arr[i] = 'R';
-        }
+        if (pL < pR) fill(arr, pR, d.length() - 1, 'R');
         
         return String.valueOf(arr);
+    }
+    
+    void fill(char[] arr, int from, int to, char l) {
+        for(int i = from; i <= to; i++) {
+            arr[i] = l;
+        }
     }
 }
