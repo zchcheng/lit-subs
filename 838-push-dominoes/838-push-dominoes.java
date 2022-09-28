@@ -12,7 +12,7 @@ class Solution {
             
             if (c == 'R') {
                 if (prevR > prevL) {
-                    for(int j = Math.max(0, prevR); j <= i; j++) arr[j] = 'R';
+                    for(int j = prevR; j <= i; j++) arr[j] = 'R';
                 }
                 prevR = i;
                 continue;
