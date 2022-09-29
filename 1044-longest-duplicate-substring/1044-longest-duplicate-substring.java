@@ -22,30 +22,27 @@ class Solution {
     }
     
     String findDupPattern(String s, int window) {
-        Map<Long, List<Integer>> visited = new HashMap<>();
         final long mod = (long)1e9 + 7;
         
+        Map<Long, List<Integer>> visited = new HashMap<>();
         long current = 0;
         long k = 1;
         
         for(int i = 1; i <= window; i++) k = (26 * k) % mod;
         
-        for(int i = 0; i < window; i++) {
+        for(int i = 0; i < s.length(); i++) {
             long v = s.charAt(i) - 'a';
-            current = ((current * 26) + v) % mod;
-        }
-        
-        visited.computeIfAbsent(current, n -> new ArrayList<>()).add(0);
-        
-        for(int i = window; i < s.length(); i++) {
-            long v = s.charAt(i) - 'a';
-            long rv = s.charAt(i - window) - 'a';
-            current = (current * 26 - rv * k % mod + mod) % mod;
-            current = (current + v) % mod;
+            current = (current * 26 + v) % mod;
+            
+            if (i >= window) {
+                long rv = s.charAt(i - window) - 'a';
+                current = (current - rv * k % mod + mod) % mod;
+            }
+            
+            if (i < window - 1) continue;
             
             if (visited.containsKey(current)) {
                 List<Integer> list = visited.get(current);
-                
                 String pat = s.substring(i - window + 1, i + 1);
                 
                 for(int idx : list) {
