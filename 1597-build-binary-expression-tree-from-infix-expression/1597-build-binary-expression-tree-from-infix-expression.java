@@ -26,7 +26,6 @@ class Solution {
                 continue;
             }
             
-            
             if (c == '+' || c == '-') {
                 while(!opStack.isEmpty() && numStack.size() >= 2 && opStack.peek().val != '(') popOpNode();
             }
