@@ -20,11 +20,4 @@ class Solution {
         
         return result;
     }
-    
-    void print(int[] arr) {
-        System.out.print("[");
-        for(int n : arr) System.out.print(n + " ");
-        System.out.print("]");
-        System.out.println();
-    }
 }
