@@ -50,11 +50,8 @@ class Solution {
     
     void popOpNode() {
         Node op = opStack.pop();
-        System.out.println(op.val);
         op.right = numStack.pop();
-        System.out.println("r: " + op.right.val);
         op.left = numStack.pop();
-        System.out.println("l: " + op.left.val);
         numStack.push(op);
     }
 }
