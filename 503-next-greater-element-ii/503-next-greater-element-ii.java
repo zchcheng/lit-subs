@@ -1,33 +1,35 @@
 class Solution {
     public int[] nextGreaterElements(int[] nums) {
+        // [1,2,3,3,1] 
+        // stack: 2(3), 3(3), 4(1)
+        //
+        // [1, 2, -1, -1, 3]
+        //
+        
         int[] result = new int[nums.length];
         
         Arrays.fill(result, -1);
-        
-        Deque<int[]> stack = new LinkedList<>();
+            
+        Deque<Integer> stack = new LinkedList<>();
         
         for(int i = 0; i < nums.length; i++) {
             int n = nums[i];
             
-            while (!stack.isEmpty() && stack.peek()[0] < n) {
-                int[] p = stack.pop();
-                result[p[1]] = n;
+            while(!stack.isEmpty() && nums[stack.peek()] < n) {
+                result[stack.pop()] = n;
             }
             
-            stack.push(new int[] {n, i});
+            stack.push(i);
         }
         
-        if (stack.size() > 1) {
-            int[] greatest = stack.pollLast();
+        for(int i = 0; i < nums.length && !stack.isEmpty(); i++) {
+            int n = nums[i];
             
-            for(int i = 0; i <= greatest[1]; i++) {
-                int n = nums[i];
-                
-                while (!stack.isEmpty() && stack.peek()[0] < n) {
-                    int[] p = stack.pop();
-                    result[p[1]] = n;
-                }
+            while(!stack.isEmpty() && nums[stack.peek()] < n) {
+                result[stack.pop()] = n;
             }
+            
+            if (i == stack.peekLast()) break;
         }
         
         return result;
