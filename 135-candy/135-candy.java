@@ -20,8 +20,6 @@ class Solution {
                 if (down >= peak) result++;
                 up = 1;
             }
-            
-            System.out.println(result + ", " + up + ", " + down + ", " + peak);
         }
         
         return result;
