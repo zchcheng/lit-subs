@@ -1,21 +1,27 @@
 class Solution {
     public int candy(int[] ratings) {
-        int[] numOfCandyNeeded = new int[ratings.length];
-        numOfCandyNeeded[0] = 1;
+        int up = 1;
+        int down = 1;
+        int result = 1;
+        int peak = Integer.MAX_VALUE;
         
         for(int i = 1; i < ratings.length; i++) {
-            if (ratings[i] > ratings[i - 1]) numOfCandyNeeded[i] = numOfCandyNeeded[i - 1] + 1;
-            else numOfCandyNeeded[i] = 1;
-        }
-        
-        for(int i = ratings.length - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) numOfCandyNeeded[i] = Math.max(numOfCandyNeeded[i], numOfCandyNeeded[i + 1] + 1);
-            else numOfCandyNeeded[i] = Math.max(1, numOfCandyNeeded[i]);
-        }
-        
-        int result = 0;
-        for(int i = 0; i < ratings.length; i++) {
-            result += numOfCandyNeeded[i];
+            if (ratings[i] == ratings[i - 1]) {
+                result++;
+                up = 1;
+                down = 1;
+                peak = Integer.MAX_VALUE;
+            } else if (ratings[i] > ratings[i - 1]) {
+                result += (++up);
+                down = 0;
+                peak = up;
+            } else {
+                result += 1 + down++;
+                if (down >= peak) result++;
+                up = 1;
+            }
+            
+            System.out.println(result + ", " + up + ", " + down + ", " + peak);
         }
         
         return result;
