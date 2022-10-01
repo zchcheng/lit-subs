@@ -1,6 +1,6 @@
 class Solution {
     public int romanToInt(String s) {
-        Map<Character, Integer> symbolValue = Map.of(
+        Map<Character, Integer> numericValue = Map.of(
             'I', 1,
             'V', 5,
             'X', 10,
@@ -11,18 +11,13 @@ class Solution {
         );
         
         int result = 0;
-        
-        for(int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
+        for(int i = 0, pv = 0; i < s.length(); i++) {
+            int v = numericValue.get(s.charAt(i));
+            result += v;
             
-            result += symbolValue.get(c);
+            if (v == pv * 5 || v == pv * 10) result -= pv * 2;
             
-            if (i > 0 && (
-                symbolValue.get(s.charAt(i - 1)) * 5 == symbolValue.get(c) || 
-                symbolValue.get(s.charAt(i - 1)) * 10 == symbolValue.get(c)
-            )) {
-                result -= symbolValue.get(s.charAt(i - 1)) * 2;
-            }
+            pv = v;
         }
         
         return result;
