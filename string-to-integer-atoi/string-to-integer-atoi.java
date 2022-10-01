@@ -1,35 +1,34 @@
 class Solution {
     public int myAtoi(String s) {
-        int index = 0;
-        int result = 0;
+        int p = 0;
         
-        while(index < s.length() && s.charAt(index) == ' ') index++;
+        // remove leading spaces
+        while(s.length() > p && s.charAt(p) == ' ') p++;
         
         boolean isNegative = false;
-        if (index < s.length() && (s.charAt(index) == '+' || s.charAt(index) == '-')) {
-            if (s.charAt(index) == '-') isNegative = true;
-            index++;
+        if (s.length() > p && (s.charAt(p) == '+' || s.charAt(p) == '-')) {
+            if (s.charAt(p) == '-') isNegative = true;
+            p++;
         }
         
-        while(index < s.length() && Character.isDigit(s.charAt(index))) {
-            int dv = Character.getNumericValue(s.charAt(index++));
-            
-            if (result == 0 && dv != 0 && isNegative) {
-                result = -dv;
-                continue;
-            }
-            
-            if (Math.abs(result) > Integer.MAX_VALUE / 10) {
-                return isNegative? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            }
-            
-            if (!isNegative && result == Integer.MAX_VALUE / 10 && dv >= Integer.MAX_VALUE % 10) return Integer.MAX_VALUE;
-            
-            if (isNegative && result == Integer.MIN_VALUE / 10 && dv >= (Integer.MAX_VALUE % 10) + 1) return Integer.MIN_VALUE;
-            
-            result = result * 10 + ((isNegative)? -dv : dv);
-        }
+        int result = 0;
         
+        while(s.length() > p && Character.isDigit(s.charAt(p))) {
+            int v = Character.getNumericValue(s.charAt(p++));
+            
+            if (result > 0 && (result > Integer.MAX_VALUE / 10 || (result == Integer.MAX_VALUE / 10 && v >= Integer.MAX_VALUE % 10))) return Integer.MAX_VALUE;
+            
+            if (result < 0 && (result < Integer.MIN_VALUE / 10 || (result == Integer.MIN_VALUE / 10 && v >= Integer.MAX_VALUE % 10 + 1))) return Integer.MIN_VALUE;
+            
+            if (result < 0) v = -v;
+            result = result * 10 + v;
+            
+            if (isNegative && result != 0) {
+                result = -result;
+                isNegative = !isNegative;
+            }
+        }
+              
         return result;
     }
 }
