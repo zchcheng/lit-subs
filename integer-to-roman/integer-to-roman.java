@@ -1,36 +1,40 @@
 class Solution {
     public String intToRoman(int num) {
-        final List<Pair<Integer, String>> symbolValues = List.of(
-            new Pair<>(1000, "M"),
-            new Pair<>(900, "CM"),
-            new Pair<>(500, "D"),
-            new Pair<>(400, "CD"),
-            new Pair<>(100, "C"),
-            new Pair<>(90, "XC"),
-            new Pair<>(50, "L"),
-            new Pair<>(40, "XL"),
-            new Pair<>(10, "X"),
-            new Pair<>(9, "IX"),
-            new Pair<>(5, "V"),
-            new Pair<>(4, "IV"),
-            new Pair<>(1, "I")
-        );
+        Roman[] list = new Roman[] {
+            new Roman("M", 1000),
+            new Roman("CM", 900),
+            new Roman("D", 500),
+            new Roman("CD", 400),
+            new Roman("C", 100),
+            new Roman("XC", 90),
+            new Roman("L", 50),
+            new Roman("XL", 40),
+            new Roman("X", 10),
+            new Roman("IX", 9),
+            new Roman("V", 5),
+            new Roman("IV", 4),
+            new Roman("I", 1)
+        };
         
-        int index = 0;
         String result = "";
+        int pointer = 0;
         
         while(num > 0) {
-            Pair<Integer, String> p = symbolValues.get(index);
-            
-            if (num < p.getKey()) {
-                index++;
-                continue;
-            }
-            
-            num -= p.getKey();
-            result += p.getValue();
+            while (list[pointer].numericValue > num) pointer++;
+            result += list[pointer].value;
+            num -= list[pointer].numericValue;
         }
         
         return result;
+    }
+    
+    class Roman {
+        public String value = "";
+        public int numericValue = 0;
+        
+        public Roman(String value, int numericValue) {
+            this.value = value;
+            this.numericValue = numericValue;
+        }
     }
 }
