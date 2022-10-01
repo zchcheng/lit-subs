@@ -1,28 +1,32 @@
 class Solution {
+    // (0, 0) (0, 1) (0, 2)
+    // (1, 0) (1, 1) (1, 2)
+    // (2, 0) (2, 1) (2, 2)
+    
     public void rotate(int[][] matrix) {
         transpose(matrix);
         upsideDown(matrix);
     }
     
-    void upsideDown(int[][] matrix) {
-        for(int r = 0; r < matrix.length / 2; r++) {
-            for(int c = 0; c < matrix.length; c++) {
-                swap(matrix, new int[] {r, c}, new int[] {matrix.length - 1 - r, c});
-            }
-        }
-    }
-    
     void transpose(int[][] matrix) {
-        for(int r = 0; r < matrix.length; r++) {
-            for(int c = 0; c < matrix.length - r; c++) {
-                swap(matrix, new int[] {r, c}, new int[] { matrix.length - 1 - c, matrix.length - 1 - r });
+        for(int i = 0; i < matrix.length; i++) {
+            for(int j = 0; j < matrix.length - i - 1; j++) {
+                swap(matrix, i, j, matrix.length - j - 1, matrix.length - i - 1);
             }
         }
     }
     
-    void swap(int[][] matrix, int[] a, int[] b) {
-        int tmp = matrix[a[0]][a[1]];
-        matrix[a[0]][a[1]] = matrix[b[0]][b[1]];
-        matrix[b[0]][b[1]] = tmp;
+    void upsideDown(int[][] matrix) {
+        for(int i = 0; i < matrix.length / 2; i++) {
+            for(int j = 0; j < matrix.length; j++) {
+                swap(matrix, i, j, matrix.length - i - 1, j);
+            }
+        }
+    }
+    
+    void swap(int[][] matrix, int a1, int a2, int b1, int b2) {
+        int tmp = matrix[a1][a2];
+        matrix[a1][a2] = matrix[b1][b2];
+        matrix[b1][b2] = tmp;
     }
 }
