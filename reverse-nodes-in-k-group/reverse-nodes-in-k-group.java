@@ -15,13 +15,15 @@ class Solution {
         
         while(head != null) {
             ListNode last = getK(head, k);
+            
             if (last == null) {
                 prevLast.next = head;
                 head = null;
             } else {
                 ListNode next = last.next;
+                
                 reverse(head, last);
-
+                
                 prevLast.next = last;
                 prevLast = head;
                 head = next;
