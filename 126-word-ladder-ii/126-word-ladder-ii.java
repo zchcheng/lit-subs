@@ -1,86 +1,92 @@
 class Solution {
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-        Map<String, Set<String>> dag = bfs(beginWord, endWord, new HashSet<>(wordList));
+        Set<String> words = new HashSet<>(wordList);
         
-        List<List<String>> result = new ArrayList<>();
-        LinkedList<String> current = new LinkedList<>();
-        current.add(endWord);
+        words.remove(beginWord);
         
-        dfs(dag, beginWord, current, result);
-        
-        return result;
-    }
-    
-    Map<String, Set<String>> bfs(String beginWord, String endWord, Set<String> wordList) {
-        Map<String, Set<String>> result = new HashMap<>();
+        Map<String, Set<String>> dag = new HashMap<>();
         
         Queue<String> queue = new LinkedList<>();
-        
         queue.offer(beginWord);
+        boolean found = false;
         
-        while(!queue.isEmpty()) {
+        while(!queue.isEmpty() && !found) {
             int size = queue.size();
-            Set<String> added = new HashSet<>();
+            Set<String> toRemove = new HashSet<>();
             
             for(int i = 0; i < size; i++) {
-                String w = queue.poll();
+                String s = queue.poll();
                 
-                if (w.equals(endWord)) return result;
-                
-                for(String n : findNeighbors(w, wordList)) {
-                    result.computeIfAbsent(n, k -> new HashSet<>()).add(w);
-                    added.add(n);
+                if (s.equals(endWord)) {
+                    found = true;
+                    break;
                 }
+                
+                Set<String> vars = getVariants(s, words);
+                
+                for(String var : vars) dag.computeIfAbsent(var, k -> new HashSet<>()).add(s);
+                
+                toRemove.addAll(vars);
             }
             
-            for(String w : added) {
-                if (w.equals(endWord)) return result;
-                queue.offer(w);
-                wordList.remove(w);
+            if (!found) {
+                for(String s : toRemove) {
+                    words.remove(s);
+                    queue.offer(s);
+                }
             }
         }
+        
+        if (!found) return List.of();
+        
+        List<List<String>> result = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+        current.add(endWord);
+        
+        backtracking(beginWord, current, dag, result);
         
         return result;
     }
     
-    Set<String> findNeighbors(String word, Set<String> wordList) {
-        Set<String> result = new HashSet<>();
+    void backtracking(String end, List<String> current, Map<String, Set<String>> dag, List<List<String>> result) {
+        String last = current.get(current.size() - 1);
         
-        char[] charArr = word.toCharArray();
-        
-        for(int i = 0; i < charArr.length; i++) {
-            char c = charArr[i];
-            for(int j = 0; j < 26; j++) {
-                char nc = (char)('a' + j);
-                if (c == nc) continue;
-                
-                charArr[i] = nc;
-                
-                String ns = new String(charArr);
-                if (wordList.contains(ns)) result.add(ns);
-            }
-            charArr[i] = c;
-        }
-        
-        return result;
-    }
-    
-    void dfs(Map<String, Set<String>> dag, String endWord, LinkedList<String> current, List<List<String>> result) {
-        String currentWord = current.peekLast();
-        
-        if (currentWord.equals(endWord)) {
-            List<String> path = new LinkedList<>(current);
-            Collections.reverse(path);
-            result.add(path);
+        if (last.equals(end)) {
+            List<String> tmp = new ArrayList<>(current);
+            Collections.reverse(tmp);
+            result.add(tmp);
             return;
         }
         
-        for(String w : dag.getOrDefault(currentWord, new HashSet<>())) {
-            current.add(w);
+        Set<String> neighbors = dag.getOrDefault(last, Set.of());
+        
+        for(String n : neighbors) {
+            current.add(n);
             
-            dfs(dag, endWord, current, result);
+            backtracking(end, current, dag, result);
             
-            current.removeLast();
+            current.remove(current.size() - 1);
         }
+    }
+    
+    Set<String> getVariants(String word, Set<String> wordList) {
+        Set<String> result = new HashSet<>();
+        
+        char[] carr = word.toCharArray();
+        
+        for(int i = 0; i < carr.length; i++) {
+            char c = carr[i];
+            
+            for(int j = 0; j < 26; j++) {
+                carr[i] = (char)('a' + j);
+                String ns = String.valueOf(carr);
+                if (word.equals(ns)) continue;
+                if (wordList.contains(ns)) result.add(ns);
+            }
+            
+            carr[i] = c;
+        }
+        
+        return result;
     }
 }
