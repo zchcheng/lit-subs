@@ -1,53 +1,53 @@
 class Solution {
+    Map<String, String> grp = new HashMap<>();
+    Map<String, Double> weight = new HashMap<>();
+    int cnt = 0;
+        
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        Map<String, Map<String, Double>> eqs = new HashMap<>();
-        
-        for(int i = 0; i < equations.size(); i++) {
-            List<String> eq = equations.get(i);
-            double val = values[i];
-            
-            eqs.computeIfAbsent(eq.get(0), k -> new HashMap<>()).put(eq.get(1), val);
-            eqs.computeIfAbsent(eq.get(1), k -> new HashMap<>()).put(eq.get(0), 1.0 / val);
-        }
-        
         double[] result = new double[queries.size()];
         
-        for(int i = 0; i < result.length; i++) {
-            result[i] = bfs(queries.get(i).get(0), queries.get(i).get(1), eqs);
+        for(int i = 0; i < equations.size(); i++) {
+            union(equations.get(i).get(0), equations.get(i).get(1), values[i]);
+        }
+        
+        for(int i = 0; i < queries.size(); i++) {
+            String a = queries.get(i).get(0);
+            String b = queries.get(i).get(1);
+            
+            if (!grp.containsKey(a) || !grp.containsKey(b)) {
+                result[i] = -1;
+                continue;
+            }
+            
+            Pair<String, Double> p1 = find(a);
+            Pair<String, Double> p2 = find(b);
+            
+            if (!p1.getKey().equals(p2.getKey())) result[i] = -1;
+            else result[i] = p1.getValue() / p2.getValue();
         }
         
         return result;
     }
     
-    double bfs(String s, String e, Map<String, Map<String, Double>> eqs) {
-        Queue<Pair<String, Double>> queue = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
+    void union(String a, String b, double w) {
+        Pair<String, Double> p1 = find(a);
+        Pair<String, Double> p2 = find(b);
         
-        if (eqs.containsKey(s)) {
-            queue.offer(new Pair(s, 1.0));
-            visited.add(s);
+        grp.put(p1.getKey(), p2.getKey());
+        weight.put(p1.getKey(), p2.getValue() * w / p1.getValue());
+    }
+    
+    Pair<String, Double> find(String i) {
+        if (grp.computeIfAbsent(i, k -> i).equals(i)) {
+            weight.put(i, 1.);
+            return new Pair<>(i, 1.);
         }
         
-        while(!queue.isEmpty()) {
-            Pair<String, Double> p = queue.poll();
-            
-            if (p.getKey().equals(e)) return p.getValue();
-            
-            String k = p.getKey();
-            double v = p.getValue();
-            
-            for(Map.Entry<String, Double> kv : eqs.get(p.getKey()).entrySet()) {
-                if (visited.contains(kv.getKey())) continue;
-                
-                String sk = kv.getKey();
-                double sv = kv.getValue();
-                
-                queue.offer(new Pair(sk, sv * v));
-                
-                visited.add(kv.getKey());
-            }
-        }
+        Pair<String, Double> p = find(grp.get(i));
         
-        return -1;
+        grp.put(i, p.getKey());
+        weight.put(i, p.getValue() * weight.get(i));
+        
+        return new Pair<>(grp.get(i), weight.get(i));
     }
 }
