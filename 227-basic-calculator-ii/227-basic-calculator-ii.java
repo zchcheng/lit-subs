@@ -1,32 +1,45 @@
 class Solution {
     public int calculate(String s) {
-        Stack<Integer> stack = new Stack<>();
+        // A op1 B op2 C
+        // if (op2 == '+' || op2 == '-') => result += A op1 B
+        // else B = B op2 C
         
-        char previousOp = '+';
+        int result = 0;
+        int val = 0;
         
-        for(int i = 0, current = 0; i <= s.length(); i++) {
+        char op1 = '+';
+        char op2 = '+';
+        
+        for(int i = 0, currentVal = 0; i <= s.length(); i++) {
             char c = (i == s.length())? '+' : s.charAt(i);
             
             if (c == ' ') continue;
             
             if (Character.isDigit(c)) {
-                current = current * 10 + Character.getNumericValue(c);
+                currentVal = currentVal * 10 + Character.getNumericValue(c);
                 continue;
             }
             
-            if (previousOp == '*') stack.push(stack.pop() * current);
-            if (previousOp == '/') stack.push(stack.pop() / current);
-            if (previousOp == '-') stack.push(-current);
-            if (previousOp == '+') stack.push(current);
+            if (op2 == '+' || op2 == '-') {
+                result = cal(result, val, op1);
+                op1 = op2;
+                op2 = c;
+                val = currentVal;
+            } else {
+                val = cal(val, currentVal, op2);
+                op2 = c;
+            }
             
-            current = 0;
-            previousOp = c;
+            currentVal = 0;
         }
         
-        int res = 0;
-        
-        while(!stack.isEmpty()) res += stack.pop();
-        
-        return res;
+        return cal(result, val, op1);
+    }
+    
+    int cal(int val1, int val2, char op) {
+        if (op == '+') return val1 + val2;
+        if (op == '-') return val1 - val2;
+        if (op == '*') return val1 * val2;
+        return val1 / val2;
     }
 }
