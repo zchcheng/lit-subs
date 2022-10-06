@@ -1,41 +1,44 @@
 class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
-        int[] row = searchForRow(matrix, target);
-        return exist(row, target);
+        int r = findRow(matrix, target);
+        
+        if (r < 0) return false;
+        
+        int c = findCol(matrix, r, target);
+        
+        return c >= 0;
     }
     
-    int[] searchForRow(int[][] matrix, int target) {
-        int s = 0;
-        int e = matrix.length - 1;
+    int findRow(int[][] matrix, int target) {
+        int l = 0, r = matrix.length - 1;
         
-        while(s <= e) {
-            int m = s + (e - s) / 2;
-            int[] r = matrix[m];
+        while(l <= r) {
+            int m = l + (r - l) / 2;
             
-            if (target >= r[0] && target <= r[r.length - 1]) return r;
+            int rl = matrix[m][0];
+            int rr = matrix[m][matrix[m].length - 1];
+           
+            if (rl <= target && target <= rr) return m;
             
-            if (target < r[0]) e = m - 1;
-            else s = m + 1;
+            if (rl > target) r = m - 1;
+            else l = m + 1;
         }
         
-        return null;
+        return -1;
     }
     
-    boolean exist(int[] row, int target) {
-        if (row == null) return false;
+    int findCol(int[][] matrix, int row, int target) {
+        int l = 0, r = matrix[row].length - 1;
         
-        int s = 0;
-        int e = row.length - 1;
-        
-        while(s <= e) {
-            int m = s + (e - s) / 2;
+        while(l <= r) {
+            int m = l + (r - l) / 2;
             
-            if (row[m] == target) return true;
+            if (matrix[row][m] == target) return m;
             
-            if (row[m] < target) s = m + 1;
-            else e = m - 1;
+            if (matrix[row][m] < target) l = m + 1;
+            else r = m - 1;
         }
         
-        return false;
+        return -1;
     }
 }
