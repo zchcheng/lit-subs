@@ -16,8 +16,8 @@ class Solution {
                 peak = up;
             } else if (ratings[i] < ratings[i - 1]) {
                 up = 0;
-                result += 1 + ++down;
-                if (peak >= down) result--;
+                result += ++down;
+                if (peak < down) result++;
             } else {
                 result++;
                 up = 0;
