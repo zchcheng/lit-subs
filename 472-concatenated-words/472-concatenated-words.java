@@ -1,29 +1,32 @@
 class Solution {
+    Set<String> concatedWords = new HashSet<>();
+    
     public List<String> findAllConcatenatedWordsInADict(String[] words) {
-        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        Set<String> wordSet = new HashSet<>();
+        for(String w : words) wordSet.add(w);
+        
         List<String> result = new ArrayList<>();
-        Set<String> preWords = new HashSet<>();
         
         for(String w : words) {
-            if (canFormWord(w, preWords)) result.add(w);
-            preWords.add(w);
+            if (helper(w, wordSet)) result.add(w);
         }
         
         return result;
     }
     
-    boolean canFormWord(String word, Set<String> words) {
-        boolean[] dp = new boolean[word.length() + 1];
-        dp[0] = true;
+    boolean helper(String str, Set<String> wordSet) {
+        if (concatedWords.contains(str)) return true;
         
-        for(int i = 1; i <= word.length(); i++) {
-            for(int j = 0; j < i; j++) {
-                if (!dp[j]) continue;
-                dp[i] = words.contains(word.substring(j, i));
-                if (dp[i]) break;
+        for(int i = 1; i < str.length(); i++) {
+            String prefix = str.substring(0, i);
+            String left = str.substring(i);
+            
+            if (wordSet.contains(prefix) && (wordSet.contains(left) || helper(left, wordSet))) {
+                concatedWords.add(str);
+                break;
             }
         }
         
-        return dp[word.length()];
+        return concatedWords.contains(str);
     }
 }
