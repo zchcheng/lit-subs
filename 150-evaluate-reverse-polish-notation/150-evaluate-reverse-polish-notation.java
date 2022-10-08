@@ -1,23 +1,25 @@
 class Solution {
     public int evalRPN(String[] tokens) {
-        Stack<Integer> stack = new Stack<Integer>();
+        Deque<Integer> stack = new LinkedList<>();
         
-        for(String tok : tokens) {
-            if (tok.equals("+")) {
-                stack.push(stack.pop() + stack.pop());
-            } else if (tok.equals("-")) {
-                stack.push(-stack.pop() + stack.pop());
-            } else if (tok.equals("*")) {
-                stack.push(stack.pop() * stack.pop());
-            } else if (tok.equals("/")) {
-                int a = stack.pop();
-                int b = stack.pop();
-                stack.push(b / a);
-            } else {
-                stack.push(Integer.parseInt(tok));
+        for(int i = 0; i < tokens.length; i++) {
+            String tok = tokens[i];
+            
+            if (tok.equals("+") || tok.equals("-") || tok.equals("*") || tok.equals("/")) {
+                int v2 = stack.pop();
+                int v1 = stack.pop();
+                
+                if (tok.equals("+")) stack.push(v1 + v2);
+                else if (tok.equals("-")) stack.push(v1 - v2);
+                else if (tok.equals("*")) stack.push(v1 * v2);
+                else stack.push(v1 / v2);
+                
+                continue;
             }
+            
+            stack.push(Integer.valueOf(tok));
         }
         
-        return stack.pop();
+        return stack.peek();
     }
 }
