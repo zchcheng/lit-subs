@@ -3,16 +3,16 @@ class Solution {
         Arrays.sort(buses);
         Arrays.sort(passengers);
         
-        int index = 0;
+        int current = 0;
         int result = 0;
         
         int lastPassenger = 0;
         for(int bus : buses) {
             int cnt = 0;
             
-            for(; cnt < capacity && index < passengers.length && passengers[index] <= bus; cnt++, index++);
+            for(; cnt < capacity && current < passengers.length && passengers[current] <= bus; cnt++, current++);
             
-            int pointer = index - 1;
+            int pointer = current - 1;
             int possibleTime = (cnt == capacity)? passengers[pointer] : bus;
             
             while(cnt > 0 && passengers[pointer] == possibleTime) {
@@ -21,7 +21,7 @@ class Solution {
             }
             
             if (possibleTime > lastPassenger) result = possibleTime;
-            if (index > 0) lastPassenger = passengers[index - 1];
+            if (current > 0) lastPassenger = passengers[current - 1];
         }
         
         return result;
