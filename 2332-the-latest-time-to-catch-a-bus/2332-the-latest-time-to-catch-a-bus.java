@@ -16,8 +16,6 @@ class Solution {
                 stack.push(passengers[pi]);
             }
             
-            //System.out.println(stack + " " + pb);
-            
             int tmp = (stack.size() == capacity)? stack.peek() : b;
             
             int npb = pb;
