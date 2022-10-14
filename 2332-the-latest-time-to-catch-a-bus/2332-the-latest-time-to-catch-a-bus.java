@@ -10,18 +10,16 @@ class Solution {
         for(int b : buses) {
             int cnt = 0;
             
-            Stack<Integer> stack = new Stack();
+            for(; cnt < capacity && pi < passengers.length && passengers[pi] <= b; cnt++, pi++);
             
-            for(; cnt < capacity && pi < passengers.length && passengers[pi] <= b; cnt++, pi++) {
-                stack.push(passengers[pi]);
-            }
-            
-            int tmp = (stack.size() == capacity)? stack.peek() : b;
+            int tpi = pi - 1;
+            int tmp = (cnt == capacity)? passengers[tpi] : b;
             
             int npb = pb;
-            while(!stack.isEmpty() && stack.peek() == tmp) {
-                npb = Math.max(npb, stack.peek());
-                tmp = stack.pop() - 1;
+            while(cnt > 0 && passengers[tpi] == tmp) {
+                npb = Math.max(npb, passengers[tpi]);
+                tmp = passengers[tpi--] - 1;
+                cnt--;
             }
             
             if (tmp > pb) result = tmp;
