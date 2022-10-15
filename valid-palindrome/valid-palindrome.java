@@ -6,7 +6,7 @@ class Solution {
             while(l < r && getAlphanumeric(s.charAt(l)) == -1) l++;
             while(l < r && getAlphanumeric(s.charAt(r)) == -1) r--;
             
-            if (l < r && getAlphanumeric(s.charAt(l)) != getAlphanumeric(s.charAt(r))) return false;
+            if (getAlphanumeric(s.charAt(l)) != getAlphanumeric(s.charAt(r))) return false;
             
             l++;
             r--;
