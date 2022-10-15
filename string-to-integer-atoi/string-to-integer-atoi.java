@@ -1,34 +1,37 @@
 class Solution {
+    final int PK = Integer.MAX_VALUE / 10;
+    final int NK = Integer.MIN_VALUE / 10;
+    final int PD = Integer.MAX_VALUE % 10;
+    final int ND = PD + 1;
+    
     public int myAtoi(String s) {
-        int p = 0;
+        int result = 0;
+        int ptr = 0;
+        boolean isNeg = false;
         
         // remove leading spaces
-        while(s.length() > p && s.charAt(p) == ' ') p++;
+        while(ptr < s.length() && s.charAt(ptr) == ' ') ptr++;
         
-        boolean isNegative = false;
-        if (s.length() > p && (s.charAt(p) == '+' || s.charAt(p) == '-')) {
-            if (s.charAt(p) == '-') isNegative = true;
-            p++;
+        if (ptr < s.length() && (s.charAt(ptr) == '-' || s.charAt(ptr) == '+')) {
+            isNeg = s.charAt(ptr) == '-';
+            ptr++;
         }
         
-        int result = 0;
-        
-        while(s.length() > p && Character.isDigit(s.charAt(p))) {
-            int v = Character.getNumericValue(s.charAt(p++));
+        while(ptr < s.length() && Character.isDigit(s.charAt(ptr))) {
+            int d = Character.getNumericValue(s.charAt(ptr++));
             
-            if (result > 0 && (result > Integer.MAX_VALUE / 10 || (result == Integer.MAX_VALUE / 10 && v >= Integer.MAX_VALUE % 10))) return Integer.MAX_VALUE;
+            if (result > 0 && (result > PK || (result == PK && d >= PD))) return Integer.MAX_VALUE;
+            if (result < 0 && (result < NK || (result == NK && d >= ND))) return Integer.MIN_VALUE;
             
-            if (result < 0 && (result < Integer.MIN_VALUE / 10 || (result == Integer.MIN_VALUE / 10 && v >= Integer.MAX_VALUE % 10 + 1))) return Integer.MIN_VALUE;
+            if (result >= 0) result = result * 10 + d;
+            else result = result * 10 - d;
             
-            if (result < 0) v = -v;
-            result = result * 10 + v;
-            
-            if (isNegative && result != 0) {
+            if (isNeg && result > 0) {
                 result = -result;
-                isNegative = !isNegative;
+                isNeg = false;
             }
         }
-              
+        
         return result;
     }
 }
