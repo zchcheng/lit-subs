@@ -1,38 +1,45 @@
 class Solution {
     public int strStr(String haystack, String needle) {
-        int[] lps = buildLps(needle);
+        int[] lps = buildLPS(needle);
         
-        for(int i = 0, j = -1; i < haystack.length(); i++) {
-            j = findPattern(lps, haystack.charAt(i), j, needle);
-            if (j == needle.length() - 1) return i - needle.length() + 1;
+        for(int i = 0, j = 0; i < haystack.length(); i++) {
+            j = findPattern(lps, needle, haystack.charAt(i), j);
+            if (j == needle.length()) return i - needle.length() + 1;
         }
         
         return -1;
     }
     
-    int[] buildLps(String str) {
-        int[] lps = new int[str.length()];
+    int findPattern(int[] lps, String str, char c, int idx) {
+        while(idx >= 0) {
+            char cc = str.charAt(idx);
+            if (cc == c) return idx + 1;
+            if (idx == 0) return 0;
+            else idx = lps[idx - 1] + 1;
+        }
         
-        Arrays.fill(lps, -1);
+        return 0;
+    }
+    
+    int[] buildLPS(String str) {
+        int[] result = new int[str.length()];
+        
+        Arrays.fill(result, -1);
         
         for(int i = 1; i < str.length(); i++) {
             char c = str.charAt(i);
             
-            int j = lps[i - 1] + 1;
-            while(j >= 0 && str.charAt(j) != c) j = (j == 0)? -1 : lps[j - 1] + 1;
+            int idx = result[i - 1] + 1;
             
-            lps[i] = j;
+            while(idx >= 0) {
+                if (str.charAt(idx) == c) break;
+                if (idx == 0) idx = -1;
+                else idx = result[idx - 1] + 1;
+            }
+            
+            result[i] = idx;
         }
         
-        return lps;
-    }
-    
-    int findPattern(int[] lps, char c, int idx, String pat) {
-        idx++;
-        while(idx >= 0 && pat.charAt(idx) != c) {
-            if (idx == 0) idx = -1;
-            else idx = lps[idx - 1] + 1;
-        }
-        return idx;
+        return result;
     }
 }
