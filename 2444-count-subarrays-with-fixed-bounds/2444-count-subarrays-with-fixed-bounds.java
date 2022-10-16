@@ -26,7 +26,6 @@ class Solution {
     
     long getCnt(int s, int e, int m) {
         if (e < s) return 0l;
-        if (m < e) return 0l;
-        return (long) m - e;
+        return (long) Math.max(0, m - e);
     }
 }
