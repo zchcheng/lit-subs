@@ -22,17 +22,18 @@ class Solution {
         if (root != null) queue.offer(root);
         
         while(!queue.isEmpty()) {
-            List<Integer> level = new ArrayList<>();
-            int queueSize = queue.size();
+            int sz = queue.size();
             
-            for(int i = 0; i < queueSize; i++) {
-                TreeNode node = queue.poll();
-                level.add(node.val);
-                if (node.left != null) queue.offer(node.left);
-                if (node.right != null) queue.offer(node.right);
+            List<Integer> list = new ArrayList<>();
+            
+            for(int i = 0; i < sz; i++) {
+                TreeNode n = queue.poll();
+                list.add(n.val);
+                if (n.left != null) queue.offer(n.left);
+                if (n.right != null) queue.offer(n.right);
             }
             
-            result.add(level);
+            result.add(list);
         }
         
         return result;
