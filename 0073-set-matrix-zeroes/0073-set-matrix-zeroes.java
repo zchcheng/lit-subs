@@ -33,13 +33,4 @@ class Solution {
         if (fr) for(int i = 0; i < c; i++) matrix[0][i] = 0;
         if (fc) for(int i = 0; i < r; i++) matrix[i][0] = 0;
     }
-    
-    void println(int[][] m) {
-        for(int i = 0; i < m.length; i++) {
-            for(int j = 0; j < m[0].length; j++) {
-                System.out.print(m[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 }
