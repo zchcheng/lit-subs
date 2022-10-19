@@ -1,32 +1,23 @@
 class Solution {
     public String longestPalindrome(String s) {
-        int[] r = new int[] {1, -1};
+        int n = s.length();
+        int[] r = new int[] {0, 1};
         
-        for(int i = 0; i < s.length(); i++) {
-            int[] t = check(s, i);
-            if (t[1] - t[0] > r[1] - r[0]) r = t;
+        boolean[][] dp = new boolean[n + 1][n];
+        
+        Arrays.fill(dp[0], true);
+        Arrays.fill(dp[1], true);
+        
+        for(int i = 2; i <= n; i++) {
+            for(int j = i - 1; j < n; j++) {
+                dp[i][j] = dp[i - 2][j - 1] && s.charAt(j) == s.charAt(j - i + 1);
+                if (dp[i][j]) {
+                    r[0] = j - i + 1;
+                    r[1] = j + 1;
+                }
+            }
         }
-        
-        if (r[0] >= r[1]) return "";
-        
-        return s.substring(r[0] + 1, r[1]);
-    }
-    
-    int[] check(String s, int i) {
-        int[] a = check(s, i - 1, i + 1, 1);
-        int[] b = check(s, i - 1, i, 0);
-        
-        if (a[1] - a[0] > b[1] - b[0]) return a;
-        return b;
-    }
-    
-    int[] check(String s, int l, int r, int init) {
-        while(l >= 0 && r < s.length()) {
-            if (s.charAt(l) == s.charAt(r)) {
-                l--;
-                r++;
-            } else break;
-        }
-        return new int[] { l, r };
+            
+        return s.substring(r[0], r[1]);
     }
 }
