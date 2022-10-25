@@ -4,10 +4,7 @@ class Solution:
         
         for s in strs:
             enc = self.encode(s)
-            if enc in m:
-                m.get(enc).append(s)
-            else:
-                m[enc] = [s]
+            m[enc] = m.get(enc, []) + [s]
                 
         return list(m.values())    
         
