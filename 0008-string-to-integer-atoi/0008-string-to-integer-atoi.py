@@ -27,7 +27,6 @@ class Solution:
                 if neg and d >= INT_MAX % 10 + 1:
                     return INT_MIN
                 if not neg and d >= INT_MAX % 10:
-                    print(5566)
                     return INT_MAX
                 
             r = r * 10 + d
