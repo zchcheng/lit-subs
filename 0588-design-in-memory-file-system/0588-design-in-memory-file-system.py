@@ -8,9 +8,7 @@ class FileSystem:
         subpaths = self.splitPath(path) 
         
         if len(subpaths) == 0:
-            res = d.getDirs() + d.getFiles()
-            res.sort()
-            return res
+            return self.getFilesAndDirs(d)
         
         for i in range(len(subpaths) - 1):
             d = d.subdirs.get(subpaths[i], None)
@@ -18,10 +16,7 @@ class FileSystem:
                 return []
                 
         if subpaths[-1] in d.subdirs:
-            d = d.subdirs[subpaths[-1]]
-            res = d.getDirs() + d.getFiles()
-            res.sort()
-            return res
+            return self.getFilesAndDirs(d.subdirs[subpaths[-1]])
         
         return [ subpaths[-1] ]
         
@@ -60,7 +55,11 @@ class FileSystem:
                 return ''
             
         return d.files[subpaths[-1]] if subpaths[-1] in d.files else ''
-        
+    
+    def getFilesAndDirs(self, d: 'Directory') -> List[str]:
+        res = d.getDirs() + d.getFiles()
+        res.sort()
+        return res
         
     def splitPath(self, path: str) -> List[str]:
         # /a/b/c -> a b c
