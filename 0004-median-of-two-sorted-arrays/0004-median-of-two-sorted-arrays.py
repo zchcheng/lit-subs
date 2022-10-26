@@ -1,9 +1,7 @@
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         k = len(nums1) + len(nums2)
-        if k % 2 == 1:
-            return self.helper(nums1, nums2, 0, 0, k // 2 + 1)
-        return (self.helper(nums1, nums2, 0, 0, k // 2) + self.helper(nums1, nums2, 0, 0, k // 2 + 1)) / 2
+        return (self.helper(nums1, nums2, 0, 0, (k + 1) // 2) + self.helper(nums1, nums2, 0, 0, (k + 2) // 2)) / 2
         
         
     def helper(self, nums1: List[int], nums2: List[int], i1: int, i2: int, k: int) -> int:
