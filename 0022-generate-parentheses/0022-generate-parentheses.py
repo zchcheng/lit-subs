@@ -1,14 +1,18 @@
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        if n == 0:
-            return ['']
-        
         res = []
-        for i in range(n):
-            for p1 in self.generateParenthesis(i):
-                for p2 in self.generateParenthesis(n - i - 1):
-                    res.append('(' + p1 + ')' + p2)
-            
+        self.helper(n, 0, '', res)
         return res
+        
+        
+    def helper(self, sl: int, cl: int, cur: str, res: List[str]) -> None:
+        if sl == 0 and cl == 0:
+            res.append(cur)
+            return
+        
+        if sl > 0:
+            self.helper(sl - 1, cl + 1, cur + '(', res)
             
+        if cl > 0:
+            self.helper(sl, cl - 1, cur + ')', res)
         
