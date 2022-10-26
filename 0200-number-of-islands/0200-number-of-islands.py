@@ -24,7 +24,7 @@ class Solution:
             l = q.popleft()
             if grid[l[0]][l[1]] != '0': continue
             
-            for m in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+            for m in [0, 1], [0, -1], [1, 0], [-1, 0]:
                 nx = l[0] + m[0]
                 ny = l[1] + m[1]
                 
