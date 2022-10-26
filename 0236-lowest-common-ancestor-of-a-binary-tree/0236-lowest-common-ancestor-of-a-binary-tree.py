@@ -21,7 +21,6 @@ class Solution:
             
         while stack:
             n = stack[-1]
-            print('current = ' + str(n.val))
             
             if n.right:
                 rn = n.right
@@ -29,10 +28,8 @@ class Solution:
                 while rn:
                     stack.append(rn)
                     if rn == p or rn == q:
-                        print(str(rn.val) + ', ' + str(p.val) + ', ' + str(q.val))
                         if not ancestor:
                             ancestor = rn
-                            print('ancestor = ' + str(ancestor.val))
                         else:
                             return ancestor
                     stack.append(rn)
