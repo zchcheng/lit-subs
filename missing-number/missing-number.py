@@ -15,8 +15,6 @@ class Solution:
             else:
                 nums[k] = -abs(nums[k])
                 
-        print(nums)
-                
         for i, j in enumerate(nums):
             if j >= 0:
                 return i
