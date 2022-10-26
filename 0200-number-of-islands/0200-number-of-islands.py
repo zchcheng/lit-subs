@@ -14,14 +14,14 @@ class Solution:
     def helper(self, grid: List[List[str]], loc: List[int]) -> None:
         self.numOfIsland += 1
         
-        q = []
+        q = deque()
         
         if grid[loc[0]][loc[1]] == '1':
             q.append(loc)
             grid[loc[0]][loc[1]] = '0'
             
         while len(q) > 0:
-            l = q.pop(0)
+            l = q.popleft()
             if grid[l[0]][l[1]] != '0': continue
             
             for m in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
