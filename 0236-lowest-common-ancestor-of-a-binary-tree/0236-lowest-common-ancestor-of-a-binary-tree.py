@@ -7,36 +7,42 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        parents = self.buildParentMap(root)
+        stack = []
+        ancestor = None
         
-        path = set()
+        while root:
+            if root == p or root == q:
+                if not ancestor:
+                    ancestor = root
+                else:
+                    return ancestor
+            stack.append(root)
+            root = root.left
+            
+        while stack:
+            n = stack[-1]
+            print('current = ' + str(n.val))
+            
+            if n.right:
+                rn = n.right
+                n.right = None
+                while rn:
+                    stack.append(rn)
+                    if rn == p or rn == q:
+                        print(str(rn.val) + ', ' + str(p.val) + ', ' + str(q.val))
+                        if not ancestor:
+                            ancestor = rn
+                            print('ancestor = ' + str(ancestor.val))
+                        else:
+                            return ancestor
+                    stack.append(rn)
+                    rn = rn.left
+            else:
+                stack.pop()
+                if ancestor and ancestor == n:
+                    ancestor = stack[-1]
+                    
+        return None
+            
         
-        while p:
-            path.add(p)
-            p = parents.get(p, None)
-            
-        while q and q not in path:
-            q = parents.get(q, None)
-            
-        return q
-        
-    def buildParentMap(self, root: 'TreeNode') -> Dict['TreeNode', 'TreeNode']:
-        res = {}
-        q = []
-        
-        if root: q.append(root)
-            
-        while q:
-            node = q.pop(0)
-            if node.left:
-                res[node.left] = node
-                q.append(node.left)
-            if node.right:
-                res[node.right] = node
-                q.append(node.right)
-                
-        return res
-                
-            
-            
             
