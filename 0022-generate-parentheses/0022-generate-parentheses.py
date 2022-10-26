@@ -5,11 +5,8 @@ class Solution:
         
         res = []
         for i in range(n):
-            p_i = self.generateParenthesis(i)
-            p_l = self.generateParenthesis(n - i - 1)
-            
-            for p1 in p_i:
-                for p2 in p_l:
+            for p1 in self.generateParenthesis(i):
+                for p2 in self.generateParenthesis(n - i - 1):
                     res.append('(' + p1 + ')' + p2)
             
         return res
