@@ -8,7 +8,7 @@ class Solution:
         return self.helper(0)
         
         
-    @cache    
+    @lru_cache    
     def helper(self, i) -> bool:
         if i >= len(self.st):
             return True
