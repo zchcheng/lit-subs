@@ -1,4 +1,5 @@
 class Solution:
+    @cache
     def isMatch(self, s: str, p: str) -> bool:
         if not p:
             return not s
