@@ -26,24 +26,15 @@ class Solution:
             return 1
         
         res = 0
-        if not current:
-            for k in cnt:
-                current.append(k)
-                cnt[k] -= 1
-                res += self.backtracking(cnt, canPair, current, n)
-                current.pop()
-                cnt[k] += 1
-        else:
-            prev = current[-1]
-            for k in canPair[prev]:
-                if cnt[k] <= 0:
-                    continue
-                    
-                current.append(k)
-                cnt[k] -= 1
-                res += self.backtracking(cnt, canPair, current, n)
-                current.pop()
-                cnt[k] += 1
+        l = cnt if not current else canPair[current[-1]]
+        for k in l:
+            if cnt[k] <= 0:
+                continue
+            current.append(k)
+            cnt[k] -= 1
+            res += self.backtracking(cnt, canPair, current, n)
+            current.pop()
+            cnt[k] += 1
                 
         return res
                     
