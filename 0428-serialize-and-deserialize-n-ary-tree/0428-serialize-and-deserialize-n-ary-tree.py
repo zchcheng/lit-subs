@@ -13,9 +13,7 @@ class Codec:
         :type root: Node
         :rtype: str
         """
-        if not root:
-            return ''
-
+        if not root: return ''
         res = str(root.val) + ',' + str(len(root.children))
 
         for child in root.children:
@@ -35,13 +33,10 @@ class Codec:
         def helper(split, i, n): 
             res = []
             for _ in range(n):
-                node = Node(split[i])
-                i += 1
-                nc = split[i]
-                i += 1
-                node.children, i = helper(split, i, nc)
-                res.append(node)
-                
+                val, nc = split[i:i+2]
+                i += 2
+                children, i = helper(split, i, nc)
+                res.append(Node(val, children))
             return (res, i)
         
         if not data: return None
