@@ -16,9 +16,6 @@ class Solution:
         if j == i and s < x:
             return res
         
-        print(j)
-        print(res)
-        
         while i < n:
             s += nums[i]
             i += 1
