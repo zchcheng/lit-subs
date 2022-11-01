@@ -15,8 +15,6 @@ class Solution:
                 tst += 1 if s[j] == ']' else -1
                 if tst >= 0: j -= 1
                 
-            print(str(i) + ', ' + str(j))
-                
             if i <= j:
                 res += 1
                 i += 1
