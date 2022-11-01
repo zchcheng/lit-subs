@@ -1,16 +1,14 @@
 class Solution:
-    sat = None
-    def maxSatisfaction(self, satisfaction: List[int]) -> int:
-        # helper(1, [-8, -1, 0, 5])
-        #  max(-1 * -8 + maxSatisfaction(2, [-1, 0, 5]), maxSatisfaction(1, [-1, 0, 5]))
+    def maxSatisfaction(self, sat: List[int]) -> int:
+        sat.sort()
         
-        satisfaction.sort()
-        self.sat = satisfaction
-        return self.helper(1, 0)
+        s = 0
+        res = 0
         
-    @cache
-    def helper(self, si, i):
-        if i >= len(self.sat):
-            return 0
-        return max(si * self.sat[i] + self.helper(si + 1, i + 1), self.helper(si, i + 1))
-        
+        for i in range(len(sat) - 1, -1, -1):
+            if sat[i] < 0 and abs(sat[i]) > s:
+                break
+            s += sat[i]
+            res += s
+            
+        return res
