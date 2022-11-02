@@ -4,12 +4,8 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         
-        copy = nums[:]
-        copy.sort(key = lambda x: x)
+        nums.sort()
         
-        j = 0
-        for i in range(len(nums)):
-            nums[j] = copy[i]
-            j += 2
-            if j >= len(nums):
-                j = 1
+        for i in range(1, len(nums) - 1, 2):
+            nums[i], nums[i + 1] = nums[i + 1], nums[i]
+            
