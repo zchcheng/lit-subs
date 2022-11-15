@@ -6,6 +6,8 @@ class Solution:
         if nums[l] < nums[r]: return nums[l]
         
         while l <= r:
+            if nums[l] <= nums[r]: return nums[l]
+            
             m = (l + r) // 2
             
             if nums[m] > nums[m + 1]:
