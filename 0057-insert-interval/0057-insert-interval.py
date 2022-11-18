@@ -9,13 +9,9 @@ class Solution:
         
         if s_idx + 1 > e_idx - 1:
             res.append(newInterval)
-            if len(res) < len(intervals) + 1:
-                return res + intervals[e_idx:]
-            else:
-                return res
+            return res + intervals[e_idx:] if len(res) < len(intervals) + 1 else res
             
-        merged = [min(newInterval[0], intervals[s_idx + 1][0]), max(newInterval[1], intervals[e_idx - 1][1])]
-        res.append(merged)
+        res.append([min(newInterval[0], intervals[s_idx + 1][0]), max(newInterval[1], intervals[e_idx - 1][1])])
         return res + intervals[e_idx:]
         
         
@@ -26,8 +22,10 @@ class Solution:
         while l <= r:
             m = (l + r) // 2
             interval = intervals[m]
-            if rl_func(interval): r = m - 1
-            else: l = m + 1
+            if rl_func(interval): 
+                r = m - 1
+            else: 
+                l = m + 1
                 
         return rs_func(l, r)
         
