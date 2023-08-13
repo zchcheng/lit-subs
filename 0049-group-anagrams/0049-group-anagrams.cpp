@@ -24,15 +24,14 @@ public:
     }
 
     string encode(string& str) {
-        string result;
+        stringstream ss;
         vector<int> arr(26, 0);
         for (char& i : str) {
             arr[i - 'a']++;
         }
         for (int i = 0; i < 26; i++) {
-            result.append(to_string(arr[i]));
-            result.append(",");
+            ss << arr[i] << ",";
         }
-        return result;
+        return ss.str();
     }
 };
