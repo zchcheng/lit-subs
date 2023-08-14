@@ -1,9 +1,6 @@
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        res = None
+        res = 0
         for i in nums:
-            if res is None:
-                res = i
-            else:
-                res ^= i
+            res ^= i
         return res
