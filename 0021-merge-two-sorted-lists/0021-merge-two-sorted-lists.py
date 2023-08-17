@@ -5,20 +5,35 @@
 #         self.next = next
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        r = ListNode()
-        cur = r
-        
-        while list1 or list2:
-            v1 = list1.val if list1 else float('inf')
-            v2 = list2.val if list2 else float('inf')
-                
-            if v1 <= v2:
-                cur.next = list1
-                list1 = list1.next
+
+        result = ListNode()
+        tail = result
+        lists = [list1, list2]
+
+        def get_from_list(index: int):
+            nonlocal lists
+            item = lists[index]
+            lists[index] = lists[index].next
+            return item
+
+        def set_tail(item: ListNode):
+            nonlocal tail
+            tail.next = item
+            item.next = None
+            tail = tail.next
+
+        while lists[0] or lists[1]:
+            if not lists[0]:
+                set_tail(get_from_list(1))
+                continue
+
+            if not lists[1]:
+                set_tail(get_from_list(0))
+                continue
+
+            if lists[0].val <= lists[1].val:
+                set_tail(get_from_list(0))
             else:
-                cur.next = list2
-                list2 = list2.next
-            
-            cur = cur.next
-        
-        return r.next
+                set_tail(get_from_list(1))
+
+        return result.next
